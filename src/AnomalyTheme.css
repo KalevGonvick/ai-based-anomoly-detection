@@ -1,0 +1,76 @@
+/*
+
+bright hue
+#28A745
+#C5F5CB
+#3291C9
+#1F2179
+#EE6666
+
+#A64B86
+#273859
+#8095BF
+#B8CCD9
+#6BF2F2
+  */
+.container-anomaly {
+  background: rgb(39,78,89);
+  background: linear-gradient(0deg, rgba(39,78,89,1) 0%, rgba(39,56,89,1) 80%);
+  font-family: 'Roboto', sans-serif !important;
+}
+
+.dark-bg-anomaly {
+  background: transparent;
+  border-bottom: 1px solid #6BF2F2;
+}
+
+.row {
+  margin-left: 0px !important;
+  margin-right: 0px !important;
+}
+
+.dark-bg-anomaly > * {
+  background: transparent;
+}
+
+.light-txt-anomaly {
+  color: #6BF2F2 !important;
+  background: transparent;
+}
+
+.medium-txt-anomaly {
+  color: #B8CCD9 !important;
+  background: transparent;
+}
+
+.txt-container-anomaly {
+  align-self: center;
+  padding: 2em;
+}
+
+.txt-container-anomaly > * {
+  background: #273859;
+  border: 1px solid #6BF2F2;
+}
+
+.caro-container-anomaly {
+  align-self: center;
+  padding: 2em;
+}
+
+.caro-container > * {
+  background: #273859;
+}
+
+.medium-clr-anomaly {
+  padding-top: 9em;
+  padding-bottom: 2em;
+  border-top: 1px solid #6BF2F2;
+  margin-left: 11em;
+  margin-right: 11em;
+}
+
+.button-anomaly {
+  color: #6BF2F2;
+  border: 1px solid #6BF2F2;
+}
