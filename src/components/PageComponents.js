@@ -1,26 +1,39 @@
 import React from 'react';
 import { Component } from 'react';
+import '../App.css';
 import {
-Navbar,
-Nav,
-Button,
-Carousel,
-Card
+  Navbar,
+  Nav,
+  Button,
+  Carousel,
+  Card
 } from 'react-bootstrap';
+import { Link, NavLink } from 'react-router-dom';
+import Holder from 'react-holder-component';
 
 export class AnomalyNavBar extends Component {
   render() {
     return (
       <Navbar variant="dark" expand="lg" className='dark-bg-anomaly'>
-        <Navbar.Brand className="light-txt-anomaly" href="#home">AI-Anomaly-Detection</Navbar.Brand>
+      <NavLink to="/" exact strict key="/">
+          <Navbar.Brand className="light-txt-anomaly">
+            AI-Anomaly-Detection
+          </Navbar.Brand>
+        </NavLink>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto" >
-            <Nav.Link className="light-txt-anomaly" href="#getstarted">Getting Started</Nav.Link>
+            <Nav.Link>
+              <NavLink className="light-txt-anomaly" to="/gettingstarted" key="/gettingstarted" >Getting Started</NavLink>
+            </Nav.Link>
           </Nav>
           <Nav>
-            <Nav.Link className="light-txt-anomaly" href="#FAQ">FAQ</Nav.Link>
-            <Nav.Link className="light-txt-anomaly" href="#About">About</Nav.Link>
+            <Nav.Link>
+              <NavLink className="light-txt-anomaly" key="/faq" exact strict to="/faq">FAQ</NavLink>
+            </Nav.Link>
+            <Nav.Link>
+              <NavLink className="light-txt-anomaly" exact strict key="/about" to="/about">About</NavLink>
+            </Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Navbar>
@@ -48,21 +61,25 @@ export class AnomalyCaro extends Component {
     return(
       <Carousel className="p-2 medium-txt-anomaly">
         <Carousel.Item>
-          <img
-            className="d-block w-100"
-            src="holder.js/800x400?text=How it works&bg=#051622"
-            alt="First slide"
-          />
+          <Holder
+            width="800px"
+            height="400px"
+            text="More Text"
+            bg="#051622"
+            className={"d-block w-100"}
+            />
           <Carousel.Caption className="medium-txt-anomaly">
             <h3>First slide label</h3>
             <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
           </Carousel.Caption>
         </Carousel.Item>
         <Carousel.Item>
-          <img
-            className="d-block w-100"
-            src="holder.js/800x400?text=How to get started&bg=#051622"
-            alt="Second Slide"
+        <Holder
+          width="800px"
+          height="400px"
+          text="More Text"
+          bg="#051622"
+          className={"d-block w-100"}
           />
           <Carousel.Caption className="medium-txt-anomaly">
             <h3>Second slide label</h3>
@@ -70,10 +87,12 @@ export class AnomalyCaro extends Component {
           </Carousel.Caption>
         </Carousel.Item>
         <Carousel.Item>
-          <img
-            className="d-block w-100"
-            src="holder.js/800x400?text=More Text&bg=#051622"
-            alt="Third slide"
+        <Holder
+          width="800px"
+          height="400px"
+          text="More Text"
+          bg="#051622"
+          className={"d-block w-100"}
           />
           <Carousel.Caption className="medium-txt-anomaly">
             <h3>Third slide label</h3>
@@ -101,7 +120,12 @@ export class AnomalyOptionCards extends Component {
     let button_txt = this.state.buttonText;
     return(
       <Card style={{ width: '18rem' }}>
-      <Card.Img variant="top" src="holder.js/100px180?bg=#051622" />
+      <Holder
+        width="100%"
+        height="180px"
+        bg="#051622"
+        className={"card-image-top"}
+        />
         <Card.Body>
           <Card.Text className="medium-txt-anomaly">
             { inner_txt }

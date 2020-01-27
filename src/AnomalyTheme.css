@@ -7,11 +7,13 @@ bright hue
 #1F2179
 #EE6666
 
+darkish-blue
 #A64B86
 #273859
 #8095BF
 #B8CCD9
 #6BF2F2
+
   */
 .container-anomaly {
   background: rgb(39,78,89);
@@ -73,4 +75,11 @@ bright hue
 .button-anomaly {
   color: #6BF2F2;
   border: 1px solid #6BF2F2;
+  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out !important;
+}
+
+.button-anomaly:hover, .button-anomaly:focus, .button-anomaly:active, .open>.dropdown-toggle.button-anomaly  {
+  color: #8095BF !important;
+  background-color: #6BF2F2 !important;
+  border-color: #8095BF !important;
 }

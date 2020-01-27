@@ -1,26 +1,83 @@
-import React from 'react';
-import { Component } from 'react';
+import React, { Component } from 'react';
+import { play, exit } from './timelines/timelines'
+import Nav from './Nav'
+import {
+  TransitionGroup,
+  Transition
+} from "react-transition-group";
+import {
+  BrowserRouter,
+  Switch,
+  Route,
+  Link,
+} from "react-router-dom";
+
 import './App.css';
-import './AnomalyTheme.css'
-import { AnomalyNavBar, AnomalyCaro, AnomalyOptionCards} from './PageComponents.js';
+import './AnomalyTheme.css';
+
+import {
+  AnomalyNavBar,
+  AnomalyCaro,
+  AnomalyOptionCards
+} from './components/PageComponents';
+
 import {
   Row,
   Col,
   Card
 } from 'react-bootstrap'
 
+
+class MainApplicationRouter extends Component {
+  render() {
+    return (
+      <BrowserRouter>
+        <div className="container-anomaly">
+          <AnomalyNavBar />
+          <Route render={({ location }) => {
+            const { pathname, key } = location;
+
+            return (
+              <TransitionGroup component={null}>
+                <Transition
+                  key={key}
+                  appear={true}
+                  onEnter={(node, appears) => play(pathname, node, appears)}
+                  onExit={(node, appears) => exit(node, appears)}
+                  timeout={{enter: 750, exit: 150}}
+                >
+                  <Switch location={location}>
+                    <Route exact path="/" component={MainApplication}/>
+                    <Route exact path="/gettingstarted" component={TempComponent}/>
+                  </Switch>
+                </Transition>
+              </TransitionGroup>
+            )
+          }}/>
+        </div>
+      </BrowserRouter>
+    )
+  }
+}
+
+class TempComponent extends Component {
+  render() {
+    return (
+      <div>this is another page</div>
+    )
+  }
+}
+
 class MainApplication extends Component {
   constructor() {
     super();
     this.state = {
-      mode: "homepage"
+      page: "default"
     }
   }
   render() {
     return (
-    <>
-      <div class="container-anomaly">
-        <AnomalyNavBar />
+      <div>
         <Row className="justify-content-md-center mt-2 mb-5">
           <Col className="txt-container-anomaly">
             <Card className="justify-content-md-center">
@@ -60,9 +117,8 @@ class MainApplication extends Component {
           </Col>
         </Row>
       </div>
-    </>
     );
   }
 }
 
-export default MainApplication;
+export default MainApplicationRouter;

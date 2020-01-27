@@ -9,10 +9,17 @@
       name="description"
       content="content"
     />
+    <base href="/">
+    <script>
+      window.loadPromise = new Promise(function(resolve) {
+        window.addEventListener('load', resolve);
+      });
+    </script>
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
     <title>Anomaly Detection</title>
   </head>
+
   <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
   <body style="overflow-x: hidden;">
     <noscript>You need to enable JavaScript to run this app.</noscript>
