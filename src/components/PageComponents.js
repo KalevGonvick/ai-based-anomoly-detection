@@ -3,38 +3,23 @@ import { Component } from 'react';
 import '../App.css';
 import {
   Navbar,
-  Nav,
   Button,
   Carousel,
   Card
 } from 'react-bootstrap';
-import { Link, NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import Holder from 'react-holder-component';
 
 export class AnomalyNavBar extends Component {
   render() {
     return (
       <Navbar variant="dark" expand="lg" className='dark-bg-anomaly'>
-      <NavLink to="/" exact strict key="/">
-          <Navbar.Brand className="light-txt-anomaly">
-            AI-Anomaly-Detection
-          </Navbar.Brand>
-        </NavLink>
+      	<NavLink className="navbar-brand" to="/" exact strict key="/"> AI-Anomaly-Detection</NavLink>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="mr-auto" >
-            <Nav.Link>
-              <NavLink className="light-txt-anomaly" to="/gettingstarted" key="/gettingstarted" >Getting Started</NavLink>
-            </Nav.Link>
-          </Nav>
-          <Nav>
-            <Nav.Link>
-              <NavLink className="light-txt-anomaly" key="/faq" exact strict to="/faq">FAQ</NavLink>
-            </Nav.Link>
-            <Nav.Link>
-              <NavLink className="light-txt-anomaly" exact strict key="/about" to="/about">About</NavLink>
-            </Nav.Link>
-          </Nav>
+          <NavLink className="nav-link light-txt-anomaly mr-auto" to="/gettingstarted" key="/gettingstarted" >Getting Started</NavLink>
+          <NavLink className="nav-link light-txt-anomaly" key="/faq" exact strict to="/faq">FAQ</NavLink>
+          <NavLink className="nav-link light-txt-anomaly" exact strict key="/about" to="/about">About</NavLink>
         </Navbar.Collapse>
       </Navbar>
     );
@@ -102,6 +87,17 @@ export class AnomalyCaro extends Component {
       </Carousel>
     );
   }
+}
+
+export class AnomalyInfoLarge extends Component {
+	render() {
+		return(
+			<Holder
+				width="100%"
+				height="600px"
+				/>
+		)
+	}
 }
 
 export class AnomalyOptionCards extends Component {
