@@ -1,15 +1,8 @@
 import React, { Component } from 'react';
-import {
-  Row,
-  Col,
-  Card
-} from 'react-bootstrap';
-
-import {
-  AnomalyCaro,
-  AnomalyOptionCards,
-	AnomalyInfoLarge
-} from '../components/PageComponents';
+import { Row, Col, Card } from 'react-bootstrap';
+import { AnomalyOptionCards } from '../components/AnomalyOptionCard.js';
+import { AnomalyInfoLarge } from '../components/AnomalyInfoLarge.js';
+import { AnomalyCaro } from '../components/AnomalyCaro.js';
 
 class Homepage extends Component {
   constructor() {
@@ -55,12 +48,11 @@ class Homepage extends Component {
           <Col xs lg="2" className="txt-container-anomaly">
             <AnomalyOptionCards
               innerText={"Some text goes here about logging in."}
-              buttonText={"Log Up"}
+              buttonText={"Log In"}
             />
           </Col>
         </Row>
-				<br />
-				<br />
+				<div class="anomaly-pagebreak-large"></div>
 				<Row>
 					<Col md={{ span: 6, offset: 3 }}>
 						<AnomalyInfoLarge />

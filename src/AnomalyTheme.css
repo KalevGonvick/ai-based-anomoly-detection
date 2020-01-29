@@ -83,3 +83,9 @@ darkish-blue
   background-color: #6BF2F2 !important;
   border-color: #8095BF !important;
 }
+
+.anomaly-pagebreak-large {
+	width: 100%;
+	height: 100%;
+	margin-top: 8em;
+}

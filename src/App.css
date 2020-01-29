@@ -37,21 +37,13 @@
   }
 }
 
-.SlideIn-appear {
-  transform: translateX(30px);
-  opacity: 0;
+.switch-wrapper {
+  position: relative;
+	background: linear-gradient(0deg, rgba(39,56,89,1) 0%, rgba(39,78,89,1) 80%);
 }
-.SlideIn-appear.SlideIn-appear-active {
-  opacity: 1;
-  transform: translateX(0);;
-  transition: all 0.6s linear;
+
+.switch-wrapper > div {
+  position: absolute;
+	background: linear-gradient(0deg, rgba(39,56,89,1) 0%, rgba(39,78,89,1) 80%);
+
 }
-.SlideIn-enter {
-    opacity: 0;
-    transform: translateX(30px);
-}
-.SlideIn-enter.SlideIn-enter-active {
-    opacity: 1;
-    transform: translateX(0);
-    transition: all 0.2s linear 0.4s;
-  }
