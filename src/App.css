@@ -39,11 +39,13 @@
 
 .switch-wrapper {
   position: relative;
+	width: 100%;
 	background: linear-gradient(0deg, rgba(39,56,89,1) 0%, rgba(39,78,89,1) 80%);
 }
 
 .switch-wrapper > div {
   position: absolute;
+	width: 100%;
 	background: linear-gradient(0deg, rgba(39,56,89,1) 0%, rgba(39,78,89,1) 80%);
 
 }
