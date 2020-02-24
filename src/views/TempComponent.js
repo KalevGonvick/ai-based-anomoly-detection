@@ -1,98 +1,113 @@
 import React, {Component} from 'react'
 import {Row, Col} from 'react-bootstrap';
-import Sketch from "react-p5";
+
+/* apex chart stuff */
+import ApexCharts from 'apexcharts'
+import Chart from 'react-apexcharts'
+import '../apexcharts.css'
 
 /* this is the sandbox component for users -- this is a temporary test case to show how it works */
+const TICKINTERVAL = 86400000;
+const XAXISRANGE = 777600000;
+const ANIMATIONINTERVAL = 1500;
 
 class TempComponent extends Component {
-	datapoints = [{x: 1, y:90},{x: 2, y:90},{x: 3, y:35}, {x: 4, y:-18}, {x: 5, y:27}, {x: 6, y:44}, {x: 6, y:15}, {x: 7, y:50}, {x: 8, y:70}]
-	highest_point_x = null;
-	lowest_point_x = null;
-	highest_point_y = null;
-	lowest_point_y = null;
-	xScale = null;
-	yScale = null;
-	graph_margin = 20;
-	graph_stepSize = 20;
-	graph_colWidth = 5;
-	graph_rowHeight = 5;
-	pre_grid_matrix = [];
-  setup = (p5, canvasParentRef) => {
-		this.graphW = p5.windowWidth - 250;
-		this.graphH = p5.windowHeight/2;
-    p5.createCanvas(this.graphW, this.graphH).parent(canvasParentRef); // use parent to render canvas in this ref (without that p5 render this canvas outside your component)
-		p5.frameRate(8);
-  };
-  draw = p5 => {
-		p5.push();
-		p5.scale(1);
-    p5.background(255);
-		this.updateScale(p5);
-		this.drawGrid(p5);
-		//this.plotData(p5);
-		p5.pop();
-
-		this.highest_point_x = null;
-		this.lowest_point_x = null;
-		this.highest_point_y = null;
-		this.lowest_point_y = null;
-		this.xScale = null;
-		this.yScale = null;
-    //this.drawGrid(p5);
-		//this.drawLines(p5);
-  };
-
-	updateScale = (p5) => {
-		for(let i = 0; i < this.datapoints.length; i++) {
-			if(this.highest_point_y === null && this.lowest_point_y === null) {
-				this.highest_point_y = this.datapoints[i].y;
-				this.lowest_point_y = this.datapoints[i].y;
-			} else if(this.datapoints[i].y > this.highest_point_y){
-				this.highest_point_y = this.datapoints[i].y;
-			} else if(this.datapoints[i].y < this.lowest_point_y) {
-				this.lowest_point_y = this.datapoints[i].y;
-			}
-		}
-		for(let i = 0; i < this.datapoints.length; i++) {
-			if(this.highest_point_x === null && this.lowest_point_x === null) {
-				this.highest_point_x = this.datapoints[i].x;
-				this.lowest_point_x = this.datapoints[i].x;
-			} else if(this.datapoints[i].x > this.highest_point_x){
-				this.highest_point_x = this.datapoints[i].x;
-			} else if(this.datapoints[i].x < this.lowest_point_x) {
-				this.lowest_point_x = this.datapoints[i].x;
-			}
-		}
-		this.xScale = (p5.width)/this.datapoints.length;
-		this.yScale = (p5.height)/(this.highest_point_y - this.lowest_point_y);
-		this.graph_stepSize = p5.height/(this.highest_point_y - this.lowest_point_y);
-		this.graph_colWidth = p5.width/(this.highest_point_x - this.lowest_point_x);
-		this.graph_rowHeight = p5.height/(this.highest_point_y - this.lowest_point_y);
+	constructor(props) {
+		super(props)
+		this.state = {
+			series: [{data: []}],
+			options: {
+				chart: {
+					id: 'realtime',
+					height: 350,
+					type: 'line',
+					background: '#ecf0f1',
+					animations: {
+						enabled: true,
+						easing: 'easeout',
+						dynamicAnimation: { speed: ANIMATIONINTERVAL	}},
+					toolbar: { show: false },
+					zoom: {	enabled: false }
+				},
+				dataLabels: {
+    			enabled: false,
+				},
+				stroke: {
+					curve: 'straight',
+					colors: '#2ecc71'
+				},
+				title: { text: 'Test Dynamic Chart', align: 'left' },
+				markers: { size: 0 },
+				xaxis: {
+					type: 'datetime',
+					range: XAXISRANGE,
+				 	title: {
+						text:'X-Axis',
+						offsetX: 0,
+        		offsetY: 5,
+		        style: {
+		            fontSize: '12px',
+		            fontFamily: 'Helvetica, Arial, sans-serif',
+		            cssClass: 'apexcharts-xaxis-title',
+		        },
+					}
+				},
+				yaxis: {
+					max: 100,
+					title: {
+	          text: 'Y-Axis',
+	          rotate: 90,
+	          offsetX: 0,
+	          offsetY: 0,
+	          style: {
+	              fontSize: '12px',
+	              fontFamily: 'Helvetica, Arial, sans-serif',
+	              cssClass: 'apexcharts-yaxis-title',
+	          },
+					}
+				 },
+				legend: {	show: false },
+				theme: {
+					pallete: 'pallete4'
+				}
+			},
+		};
+		this.lastDate = 0;
+		this.data = [];
 	}
 
+	getNewSeries = (baseval, yrange) => {
+    let newDate = baseval + TICKINTERVAL;
+    this.lastDate = newDate
 
-	drawGrid = (p5) => {
-		for (let i = 1; i <= this.datapoints.length;i++) {
-			let x = i * this.xScale;
-			p5.line(x, this.graph_rowHeight, x, this.graphH - this.graph_margin);
-		}
-		let count =  0;
-		for (let scale = this.highest_point_y; scale >= this.lowest_point_y; scale = scale - this.graph_stepSize) {
-			let y = (this.yScale * count * this.graph_stepSize);
-			p5.text(Math.round(scale), this.graph_colWidth, y);
-			p5.line(this.graph_colWidth, y, this.graphW, y);
-			count++;
-		}
+    for(var i = 0; i< this.data.length - 10; i++) {
+      // IMPORTANT
+      // we reset the x and y of the data which is out of drawing area
+      // to prevent memory leaks
+      this.data[i].x = newDate - XAXISRANGE - TICKINTERVAL
+      this.data[i].y = 0
+    }
+		this.data.push({
+      x: newDate,
+      y: Math.floor(Math.random() * (yrange.max - yrange.min + 1)) + yrange.min
+    })
 	}
 
-	plotData = (p5) => {
-		for(let i = 0; i < this.datapoints.length - 1; i++) {
-			p5.push();
-			p5.strokeWeight(4);
-			p5.stroke(255, 0, 0);
-			p5.line(i*this.xScale, this.datapoints[i].y, (i+1)*this.xScale, this.datapoints[i+1].y);
-			p5.pop();
-		}
+	componentDidMount() {
+		window.setInterval(() => {
+
+			/*
+			 * Temp function to get random data
+			 * We will change this to update recieve data from the server instead
+			*/
+			this.getNewSeries(this.lastDate, {
+				min: 10,
+				max: 90
+			});
+			ApexCharts.exec('realtime', 'updateSeries', [{
+				data: this.data
+			}]);
+		}, ANIMATIONINTERVAL)
 	}
 
 
@@ -101,7 +116,13 @@ class TempComponent extends Component {
     return (
 			<div>
 				  <Row className="justify-content-md-center mt-2 mb-5">
-						<Sketch setup={this.setup} draw={this.draw}/>
+						<Col className="apexcharts-container">
+							<Chart
+								options={this.state.options}
+								series={this.state.series}
+								type="line"
+								height={350} />
+						</Col>
 					</Row>
 					<Row>
 					<Col>
