@@ -1,5 +1,6 @@
-import React, {Component} from 'react'
+import React, {Component} from 'react';
 import {Row, Col} from 'react-bootstrap';
+import * as CONSTANTS from '../configurations';
 
 /* apex chart stuff */
 import ApexCharts from 'apexcharts'
@@ -7,119 +8,55 @@ import Chart from 'react-apexcharts'
 import '../apexcharts.css'
 
 /* this is the sandbox component for users -- this is a temporary test case to show how it works */
-const TICKINTERVAL = 86400000;
-const XAXISRANGE = 777600000;
-const ANIMATIONINTERVAL = 1500;
-
 class TempComponent extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			series: [{data: []}],
-			options: {
-				chart: {
-					id: 'realtime',
-					height: 350,
-					type: 'line',
-					background: '#ecf0f1',
-					animations: {
-						enabled: true,
-						easing: 'easeout',
-						dynamicAnimation: { speed: ANIMATIONINTERVAL	}},
-					toolbar: { show: false },
-					zoom: {	enabled: false }
-				},
-				dataLabels: {
-    			enabled: false,
-				},
-				stroke: {
-					curve: 'straight',
-					colors: '#2ecc71'
-				},
-				title: { text: 'Test Dynamic Chart', align: 'left' },
-				markers: { size: 0 },
-				xaxis: {
-					type: 'datetime',
-					range: XAXISRANGE,
-				 	title: {
-						text:'X-Axis',
-						offsetX: 0,
-        		offsetY: 5,
-		        style: {
-		            fontSize: '12px',
-		            fontFamily: 'Helvetica, Arial, sans-serif',
-		            cssClass: 'apexcharts-xaxis-title',
-		        },
-					}
-				},
-				yaxis: {
-					max: 100,
-					title: {
-	          text: 'Y-Axis',
-	          rotate: 90,
-	          offsetX: 0,
-	          offsetY: 0,
-	          style: {
-	              fontSize: '12px',
-	              fontFamily: 'Helvetica, Arial, sans-serif',
-	              cssClass: 'apexcharts-yaxis-title',
-	          },
-					}
-				 },
-				legend: {	show: false },
-				theme: {
-					pallete: 'pallete4'
-				}
-			},
+			options: CONSTANTS.chart_options,
+			series: [{ data: [] }]
 		};
-		this.lastDate = 0;
-		this.data = [];
 	}
 
-	getNewSeries = (baseval, yrange) => {
-    let newDate = baseval + TICKINTERVAL;
-    this.lastDate = newDate
+	updateData = () => {
+    const x = Math.floor(new Date().getTime() / 1000);
+    const y = Math.floor(Math.random() * 90);
 
-    for(var i = 0; i< this.data.length - 10; i++) {
-      // IMPORTANT
-      // we reset the x and y of the data which is out of drawing area
-      // to prevent memory leaks
-      this.data[i].x = newDate - XAXISRANGE - TICKINTERVAL
-      this.data[i].y = 0
-    }
-		this.data.push({
-      x: newDate,
-      y: Math.floor(Math.random() * (yrange.max - yrange.min + 1)) + yrange.min
-    })
+    let { data } = this.state.series[0];
+    data.push({ x, y });
+
+    this.setState({ series: [{ data }] }, () =>
+      ApexCharts.exec("realtime_data_display", "updateSeries", this.state.series)
+    );
+
+    // stop data array from leaking memory and growing too big
+    if (data.length > 150) this.resetData();
+  };
+
+	resetData = () => {
+    const { data } = this.state.series[0];
+		this.setState({
+      series: [{ data: data.slice(data.length - 100, data.length) }]
+    });
+  };
+
+	componentWillUnmount() {
+			clearInterval(this.updateInterval);
 	}
 
 	componentDidMount() {
-		window.setInterval(() => {
-
-			/*
-			 * Temp function to get random data
-			 * We will change this to update recieve data from the server instead
-			*/
-			this.getNewSeries(this.lastDate, {
-				min: 10,
-				max: 90
-			});
-			ApexCharts.exec('realtime', 'updateSeries', [{
-				data: this.data
-			}]);
-		}, ANIMATIONINTERVAL)
+		this.updateInterval = setInterval(() => this.updateData(), CONSTANTS.animation_interval);
 	}
 
 
   render() {
-
+		const { options, series } = this.state;
     return (
 			<div>
 				  <Row className="justify-content-md-center mt-2 mb-5">
-						<Col className="apexcharts-container">
+						<Col className="mixed-chart">
 							<Chart
-								options={this.state.options}
-								series={this.state.series}
+								options={options}
+								series={series}
 								type="line"
 								height={350} />
 						</Col>
