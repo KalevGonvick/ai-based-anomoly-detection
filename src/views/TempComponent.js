@@ -35,7 +35,7 @@ class TempComponent extends Component {
 	resetData = () => {
     const { data } = this.state.series[0];
 		this.setState({
-      series: [{ data: data.slice(data.length - 100, data.length) }]
+      series: [{ data: data.slice(data.length - 50, data.length) }]
     });
   };
 
