@@ -1,4 +1,4 @@
-const ANIMATIONINTERVAL = 1500;
+const ANIMATIONINTERVAL = 750;
 const XAXISRANGE = 100;
 export const seed = 56;
 export const tick_interval = 86400000;
@@ -9,7 +9,7 @@ export const chart_options = {
     id: 'realtime_data_display',
     height: 350,
     type: 'line',
-    background: '#ecf0f1',
+    background: '#ffffff',
     animations: {
       enabled: true,
       easing: 'eastout',

@@ -8,7 +8,7 @@ import Chart from 'react-apexcharts'
 import '../apexcharts.css'
 
 /* this is the sandbox component for users -- this is a temporary test case to show how it works */
-class TempComponent extends Component {
+class SandBox extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
@@ -71,4 +71,4 @@ class TempComponent extends Component {
   }
 }
 
-export default TempComponent;
+export default SandBox;
