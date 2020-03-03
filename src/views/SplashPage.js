@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Row, Col /*, Card*/ } from 'react-bootstrap';
+import { WebGlAnimationBG } from '../components/WebGlAnimationBG.js';
 // import { AnomalyOptionCards } from '../components/AnomalyOptionCard.js';
 // import { AnomalyInfoLarge } from '../components/AnomalyInfoLarge.js';
 // import { AnomalyCaro } from '../components/AnomalyCaro.js';
@@ -14,10 +15,7 @@ class SplashPage extends Component {
   render() {
     return (
       <div>
-        <Row className="justify-content-md-center mt-2 mb-5">
-          <Col className="txt-container-anomaly">
-					</Col>
-				</Row>
+        <WebGlAnimationBG />
       </div>
     );
   }
