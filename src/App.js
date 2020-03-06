@@ -4,8 +4,9 @@ import { AnimatedSwitch } from 'react-router-transition';
 import { AnomalyNavBar } from './components/AnomalyNavBar';
 
 /* views */
-import Homepage from './views/Homepage.js'
-import TempComponent from './views/TempComponent.js'
+import SplashPage from './views/SplashPage.js'
+import GettingStartedPage from './views/GettingStartedPage.js'
+import SandBox from './views/SandBox.js'
 
 /* CSS */
 import './AnomalyTheme.css';
@@ -23,8 +24,9 @@ class MainApplicationRouter extends Component {
 				      atActive={{ opacity: 1 }}
 				      className="switch-wrapper"
 				    >
-			      	<Route exact path="/" component={Homepage} />
-			      	<Route path="/example-sandbox" component={TempComponent}/>
+			      	<Route exact path="/" component={SplashPage} />
+							<Route exact path="/getting-started" component={GettingStartedPage}/>
+			      	<Route path="/sandbox" component={SandBox}/>
 			    	</AnimatedSwitch>
 					</div>
   		</Router>

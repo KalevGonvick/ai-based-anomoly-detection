@@ -4,7 +4,7 @@ import { AnomalyOptionCards } from '../components/AnomalyOptionCard.js';
 import { AnomalyInfoLarge } from '../components/AnomalyInfoLarge.js';
 import { AnomalyCaro } from '../components/AnomalyCaro.js';
 
-class Homepage extends Component {
+class GettingStartedPage extends Component {
   constructor() {
     super();
     this.state = {
@@ -63,4 +63,4 @@ class Homepage extends Component {
   }
 }
 
-export default Homepage;
+export default GettingStartedPage;
