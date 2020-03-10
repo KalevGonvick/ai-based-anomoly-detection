@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-class GettingStartedPage extends Component {
+class FAQPage extends Component {
   constructor() {
     super();
     this.state = {
@@ -15,4 +15,4 @@ class GettingStartedPage extends Component {
   }
 }
 
-export default GettingStartedPage;
+export default FAQPage;

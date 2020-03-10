@@ -1,14 +1,14 @@
 import * as THREE from 'three';
 import React, {Component} from 'react'
 
-const maxParticleCount = 500;
-const particleCount = 400;
-const r = 800;
+const maxParticleCount = 450;
+const particleCount = 350;
+const r = 900;
 const rHalf = r / 2;
 const effectController = {
 	showDots: true,
 	showLines: true,
-	minDistance: 150,
+	minDistance: 175,
 	limitConnections: false,
 	maxConnections: 20,
 	particleCount: 400
@@ -23,9 +23,9 @@ export class WebGlAnimationBG extends Component {
 
 	componentDidMount() {
 		this.camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 4000 );
-		this.camera.position.z = 750;
+		this.camera.position.z = 2250;
 		this.scene = new THREE.Scene();
-		this.scene.background = new THREE.Color( 0xf0f0f0 );
+		this.scene.background = new THREE.Color( 0xdddddd );
 		this.group = new THREE.Group();
 		this.scene.add( this.group );
 		this.segments = maxParticleCount * maxParticleCount;
@@ -80,9 +80,11 @@ export class WebGlAnimationBG extends Component {
 		this.group.add( this.linesMesh );
 		this.renderer = new THREE.WebGLRenderer( { antialias: true } );
 		this.renderer.setPixelRatio( window.devicePixelRatio );
-		this.renderer.setSize( window.innerWidth, window.innerHeight );
+		this.renderer.setSize( window.innerWidth * 3, window.innerHeight * 3 );
 		this.renderer.outputEncoding = THREE.sRGBEncoding;
-		document.body.appendChild( this.renderer.domElement );
+
+		let container = document.getElementById( 'canvas-container' );
+		container.appendChild( this.renderer.domElement );
 		this.animate();
 	}
 
@@ -160,14 +162,16 @@ export class WebGlAnimationBG extends Component {
 		this.linesMesh.geometry.attributes.color.needsUpdate = true;
 		this.pointCloud.geometry.attributes.position.needsUpdate = true;
 		this.time = Date.now() * 0.001;
-		//this.group.rotation.y = this.time * 0.1;
-		//this.group.rotation.x = this.time * 0.1;
+		this.group.rotation.y = this.time / 20;
+		this.group.rotation.x = this.time / 20;
 		this.renderer.render( this.scene, this.camera );
 	}
 
 	render() {
 		return(
-			<div/>
+			<div id="canvas-container">
+
+			</div>
 		)
 	}
 }

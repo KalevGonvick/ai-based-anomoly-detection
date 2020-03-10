@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-class GettingStartedPage extends Component {
+class UserPage extends Component {
   constructor() {
     super();
     this.state = {
@@ -9,10 +9,10 @@ class GettingStartedPage extends Component {
   render() {
     return (
       <div>
-        getting started page
+        User Upload Stuff goes here
       </div>
     );
   }
 }
 
-export default GettingStartedPage;
+export default UserPage;

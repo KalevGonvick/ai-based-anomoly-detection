@@ -17,9 +17,10 @@ export class AnomalyNavBar extends Component {
 						<NavLink className="nav-link light-txt-anomaly mr-auto" to="/getting-started" key="/getting-started" >Getting Started</NavLink>
 					</Nav>
 					<Nav>
-						<NavLink className="nav-link light-txt-anomaly" key="/faq" exact strict to="/faq">FAQ</NavLink>
+						<NavLink className="nav-link light-txt-anomaly" key="/FAQ" exact strict to="/faq">FAQ</NavLink>
 						<NavLink className="nav-link light-txt-anomaly" key="/sandbox" exact strict to="/sandbox">Example Sandbox</NavLink>
 						<NavLink className="nav-link light-txt-anomaly" key="/about" exact strict to="/about">About</NavLink>
+            <NavLink className="nav-link light-txt-anomaly" key="/My-Profile" exact strict to="/My-Profile">My-Profile</NavLink>
 					</Nav>
         </Navbar.Collapse>
       </Navbar>
