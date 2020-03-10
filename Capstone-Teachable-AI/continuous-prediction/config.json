@@ -1,0 +1,21 @@
+{
+    "batch-size": 32,
+    "train-size": 0.7,
+    "input-name": "input",
+    "target-name": "target",
+    "input-num-units": 256,
+    "output-num-units": 1,
+    "x-window": 5,
+    "data-path":"../dataset/",
+    "y-window": 1,
+    "epochs": 300,
+    "model-optimizer": "adam",
+    "num-features": 1,
+    "file-names":["normal.csv", "delay.csv", "random.csv"],
+    "exp-name": {
+        "normal": "normal.h5",
+        "delay": "delay.h5",
+        "random": "random.h5"
+    },
+    "model-weights": "model.h5"
+}
