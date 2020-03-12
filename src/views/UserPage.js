@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {FileUploader} from '../components/UserPageComponents/CSVUploader';
 class UserPage extends Component {
   constructor() {
     super();
@@ -10,6 +11,7 @@ class UserPage extends Component {
     return (
       <div>
         User Upload Stuff goes here
+        <FileUploader />
       </div>
     );
   }
