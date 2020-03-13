@@ -6,7 +6,7 @@
     "input-num-units": 256,
     "output-num-units": 1,
     "x-window": 5,
-    "data-path":"../dataset/",
+    "data-path":"./dataset/",
     "y-window": 1,
     "epochs": 300,
     "model-optimizer": "adam",
