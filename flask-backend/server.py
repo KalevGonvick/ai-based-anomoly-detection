@@ -10,16 +10,17 @@ import json
 
 app = Flask(__name__)
 
-# get the configuration file so as to have access to the parameters
-params = 'config.json'  # change to appropriate directory
-if os.path.isfile(params):
-    params = json.load(open(params, mode='r'))
-data_path = params['data-path']  # directory to load data from
 
 @app.route("/")
 def hello():
     html = "<h3>Hello, World!</h3>"
     return html
+
+# get the configuration file so as to have access to the parameters
+params = 'config.json'  # change to appropriate directory
+if os.path.isfile(params):
+    params = json.load(open(params, mode='r'))
+data_path = params['data-path']  # directory to load data from
 
 def vectorize_data():
     """A function to store the data in the format we want"""
@@ -75,6 +76,43 @@ def vectorize_data():
             print(
                 f'>>> stored sample: {input_data[0]}<<<\n>>>{target_data[0]} <<<')
     return
+
+
+def load_data(exp_name):
+    """Load data from the database"""
+    # change path accordingly
+    # retrieve the name of specific database required
+    xy_db = params['exp-name'][exp_name]
+    input_name = params['input-name']
+    target_name = params['target-name']
+    #n_features = params['num-features']
+    with h5py.File(xy_db, 'r') as db:
+        #index = start_index
+        input_data = db[input_name][:]
+        target_data = db[target_name][:]
+        return (input_data, target_data)
+
+
+def regression_error(prediction, target, window):
+    n_data = len(target)
+    count = 0
+    errors = []
+    while count + window <= n_data:
+        error = [abs(y_pred-y_truth) for y_pred, y_truth in zip(
+            prediction[count:count+window], target[count:count+window])]
+        errors.append(np.mean(error))
+        count += window
+    return errors
+
+def chebyshev_probability(average,varianse,error_val):
+    probability = []
+    for val in error_val:
+        if val-average >= 1:
+            prob = varianse/((val-average)**2)
+            probability.append(prob)
+    return probability
+# % run to make sure nothing breaks
+#vectorize_data()
 
 
 if __name__ == "__main__":
