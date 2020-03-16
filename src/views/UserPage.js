@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {FileUploader} from '../components/UserPageComponents/CSVUploader';
+import CSVDropzone from '../components/UserPageComponents/CSVDropzone';
 class UserPage extends Component {
   constructor() {
     super();
@@ -10,8 +10,8 @@ class UserPage extends Component {
   render() {
     return (
       <div>
-        User Upload Stuff goes here
-        <FileUploader />
+        <p>User Upload Stuff goes here</p>
+        <CSVDropzone />
       </div>
     );
   }
