@@ -16,16 +16,10 @@ from util import Utils_Teachable_AI
 from tensorflow.keras.callbacks import EarlyStopping
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras import regularizers
-from matplotlib import pyplot as plt
 from sklearn.model_selection import train_test_split
-import seaborn as sns
-plt.rcParams['text.usetex'] = True
-plt.rcParams["font.weight"] = "bold"
-plt.rcParams["axes.labelweight"] = "bold"
-# plt.rcParams['pdf.fonttype'] = 42
-sns.set(color_codes=True)
-sns.set_context("paper")
+from flask import Flask, jsonify
 
+app = Flask(__name__)
 
 class Teachable_AI(object):
     def __init__(self, config_filename, train=False):
@@ -61,7 +55,7 @@ class Teachable_AI(object):
                                  validation_split=0.1)
         model_filename = self.params['model']
         self.model.save(model_filename)
-        print(f'>>> model saved in: {model_filename} <<<')
+        # print(f'>>> model saved in: {model_filename} <<<')
         return history
 
     def rnn_model(self):
@@ -148,7 +142,7 @@ class Teachable_AI(object):
             graph_data['d_prob'] = d_prob
             # refer to cell 20 of the jupyter notebook
             # for the plot or stream using your module
-
+            # print(graph_data)
             return graph_data
 
     def test(self, experiment_name):
@@ -161,9 +155,18 @@ class Teachable_AI(object):
         target = Y.flatten()
         return predicted, target
 # test the run function
-#%%
-model = Teachable_AI('config.json')
-model.run()
+# model = Teachable_AI('config.json')
+# model.run()
 
+@app.route("/")
+def hello():
+    html = "<h3>Hello, World!</h3>"
+    return html
 
-# %%
+@app.route("/graphData")
+def graphData():
+    model = Teachable_AI('./temporal-profile/config.json')
+    return jsonify(str(model.run()))
+
+if __name__ == "__main__":
+  app.run(host='0.0.0.0', port=80)

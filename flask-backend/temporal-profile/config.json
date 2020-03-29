@@ -6,17 +6,17 @@
     "input-num-units": 256,
     "output-num-units": 1,
     "x-window": 5,
-    "data-path":"../dataset/",
+    "data-path":"./dataset/",
     "y-window": 1,
     "epochs": 300,
     "model-optimizer": "adam",
     "num-features": 1,
     "file-names":["normal.csv", "delay.csv", "random.csv"],
     "exp-name": {
-        "normal": "normal.h5",
-        "delay": "delay.h5",
-        "random": "random.h5"
+        "normal": "./temporal-profile/normal.h5",
+        "delay": "./temporal-profile/delay.h5",
+        "random": "./temporal-profile/random.h5"
     },
-    "model-weights": "model-weights.h5",
-    "model":"model.h5"
+    "model-weights": "./temporal-profile/model-weights.h5",
+    "model":"./temporal-profile/model.h5"
 }
