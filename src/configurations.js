@@ -1,61 +1,168 @@
 const ANIMATIONINTERVAL = 750;
 const XAXISRANGE = 100;
 export const seed = 56;
-export const tick_interval = 86400000;
+//export const tick_interval = 86400000;
 export const x_axis_range = XAXISRANGE;
 export const animation_interval = ANIMATIONINTERVAL;
 export const chart_options = {
   chart: {
-    id: 'realtime_data_display',
     height: 350,
     type: 'line',
-    background: '#ffffff',
+    stacked: true,
     animations: {
       enabled: true,
-      easing: 'eastout',
-      dynamicAnimation: { speed: ANIMATIONINTERVAL	}},
-    toolbar: { show: false },
-    zoom: {	enabled: false }
+      easing: 'linear',
+      dynamicAnimation: {
+        speed: 1000
+      }
+    },
+    dropShadow: {
+      enabled: true,
+      opacity: 0.3,
+      blur: 5,
+      left: -7,
+      top: 22
+    },
+    toolbar: {
+      show: false
+    },
+    zoom: {
+      enabled: false
+    }
   },
   dataLabels: {
-    enabled: false,
+    enabled: false
   },
   stroke: {
     curve: 'straight',
     colors: '#2ecc71'
   },
-  title: { text: 'Test Dynamic Chart', align: 'left' },
-  markers: { size: 0 },
+  title: { text: 'Anomaly Results', align: 'left' },
+  markers: {
+    size: 0,
+    hover: {
+      size: 0
+    }
+  },
+
   xaxis: {
     type: 'datetime',
-    range: XAXISRANGE,
-    title: {
-      text:'X-Axis',
-      offsetX: 0,
-      offsetY: 5,
-      style: {
-          fontSize: '12px',
-          fontFamily: 'Helvetica, Arial, sans-serif',
-          cssClass: 'apexcharts-xaxis-title',
-      },
+    range: 2700000
+  },
+  subtitle: {
+    text: '20',
+    floating: true,
+    align: 'right',
+    offsetY: 0,
+    style: {
+      fontSize: '22px'
     }
   },
   yaxis: {
-    max: 100,
-    title: {
-      text: 'Y-Axis',
-      rotate: 90,
-      offsetX: 0,
-      offsetY: 0,
-      style: {
-          fontSize: '12px',
-          fontFamily: 'Helvetica, Arial, sans-serif',
-          cssClass: 'apexcharts-yaxis-title',
-      },
+   decimalsInFloat: 2,
+   opposite: true,
+   labels: {
+     offsetX: -10
+   }
+ },
+ subtitle: {
+    text: '20',
+    floating: true,
+    align: 'right',
+    offsetY: 0,
+    style: {
+      fontSize: '22px'
     }
+  },
+ legend: {
+   show: true,
+   floating: true,
+   horizontalAlign: 'left',
+   onItemClick: {
+     toggleDataSeries: false
    },
-  legend: {	show: false },
-  theme: {
-    pallete: 'pallete4'
-  }
+   position: 'top',
+   offsetY: -33,
+   offsetX: 60
+ }
 };
+
+export const second_op =
+  {
+  chart: {
+    id: "realtime_data_display",
+    height: 350,
+    type: 'line',
+    stacked: true,
+    animations: {
+      enabled: true,
+      easing: 'linear',
+      dynamicAnimation: {
+        speed: ANIMATIONINTERVAL
+      }
+    },
+    dropShadow: {
+      enabled: true,
+      opacity: 0.3,
+      blur: 5,
+      left: -7,
+      top: 22
+    },
+    toolbar: {
+      show: false
+    },
+    zoom: {
+      enabled: false
+    }
+  },
+  dataLabels: {
+    enabled: false
+  },
+  stroke: {
+    curve: 'straight',
+    width: 5,
+  },
+  grid: {
+    padding: {
+      left: 0,
+      right: 0
+    }
+  },
+  markers: {
+    size: 0,
+    hover: {
+      size: 0
+    }
+  },
+  xaxis: {
+    type: 'datetime',
+    range: XAXISRANGE,
+  },
+  title: {
+    text: 'Processes',
+    align: 'left',
+    style: {
+      fontSize: '12px'
+    }
+  },
+  subtitle: {
+    text: '20',
+    floating: true,
+    align: 'right',
+    offsetY: 0,
+    style: {
+      fontSize: '22px'
+    }
+  },
+  legend: {
+    show: true,
+    floating: true,
+    horizontalAlign: 'left',
+    onItemClick: {
+      toggleDataSeries: false
+    },
+    position: 'top',
+    offsetY: -33,
+    offsetX: 60
+  },
+}
