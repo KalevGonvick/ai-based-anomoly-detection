@@ -1,6 +1,7 @@
 # The file Dockerfile defines the image's environment
 # Import Python runtime and set up working directory
-FROM python:3.6
+FROM python:3.6-slim
+
 WORKDIR /app
 ADD . /app
 
