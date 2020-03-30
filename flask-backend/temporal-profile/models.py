@@ -17,9 +17,7 @@ from tensorflow.keras.callbacks import EarlyStopping
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras import regularizers
 from sklearn.model_selection import train_test_split
-from flask import Flask, jsonify
 
-app = Flask(__name__)
 
 class Teachable_AI(object):
     def __init__(self, config_filename, train=False):
@@ -157,16 +155,3 @@ class Teachable_AI(object):
 # test the run function
 # model = Teachable_AI('config.json')
 # model.run()
-
-@app.route("/")
-def hello():
-    html = "<h3>Hello, World!</h3>"
-    return html
-
-@app.route("/graphData")
-def graphData():
-    model = Teachable_AI('./temporal-profile/config.json')
-    return jsonify(str(model.run()))
-
-if __name__ == "__main__":
-  app.run(host='0.0.0.0', port=80)
