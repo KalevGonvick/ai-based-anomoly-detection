@@ -13,9 +13,10 @@
     "num-features": 1,
     "file-names":["normal.csv", "delay.csv", "random.csv"],
     "exp-name": {
-        "normal": "normal.h5",
-        "delay": "delay.h5",
-        "random": "random.h5"
+        "normal": "./temporal-profile/normal.h5",
+        "delay": "./temporal-profile/delay.h5",
+        "random": "./temporal-profile/random.h5"
     },
-    "model-weights": "model.h5"
+    "model-weights": "./temporal-profile/model-weights.h5",
+    "model":"./temporal-profile/model.h5"
 }
