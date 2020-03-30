@@ -12,4 +12,4 @@ RUN pip install -r requirements.txt
 EXPOSE 80
 
 # Run app.py when the container launches
-CMD ["python", "python ./temporal-profile/models.py "]
+CMD ["python", "temporal-profile/models.py "]
