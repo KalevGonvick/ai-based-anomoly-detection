@@ -93,7 +93,6 @@ class Teachable_AI(object):
         # the data from delay.csv and random.csv seperated into input and target
         X_d, Y_d = self.utils.load_data('delay')
         X_r, Y_r = self.utils.load_data('random')
-        print(Y_d)
         # number of chunks we split our data into
         num_chunk = 10
         # arrays that hold the chunks of data
@@ -125,57 +124,58 @@ class Teachable_AI(object):
             # or you can stream the values in your own module which yuu have been creating.
             print("--------Training Done---------")
         else:  # we are testing and not training
-            test_chunk = chunked_data[0]
-            graph_data = {}
-            print("---------Testing----------")
-            # test our model on the normal test data
-            n_predictions = self.model.predict(test_chunk['X_test'])
-            # flatten the predictions
-            n_predictions = n_predictions.flatten()
-            # round the output to integers
-            n_predicted = [round(val) for val in n_predictions]
-            n_target = test_chunk['Y_test'].flatten()  # flatten target to single array too
-            # refer to cell 10 of the jupyter notebook for plotting or you can stream
-            # the values using your own visualization tool we talked about before
-            graph_data['n_predicted'] = n_predicted
-            graph_data['n_target'] = n_target
+            for dataset in chunked_data:
+                graph_data = {}
+                print("---------Testing----------")
+                # test our model on the normal test data
+                n_predictions = self.model.predict(dataset['X_test'])
+                # flatten the predictions
+                n_predictions = n_predictions.flatten()
+                # round the output to integers
+                n_predicted = [round(val) for val in n_predictions]
+                n_target = dataset['Y_test'].flatten()  # flatten target to single array too
+                # refer to cell 10 of the jupyter notebook for plotting or you can stream
+                # the values using your own visualization tool we talked about before
+                graph_data['n_predicted'] = n_predicted
+                graph_data['n_target'] = n_target
 
-            # test for the delay profile
-            # d_predicted, d_target = self.test('delay')
-            d_predicted, d_target = self.test(test_chunk['X_d'], test_chunk['Y_d'])
-            # again, refer to cell 13 of the jupyter notebook for plotting or stream the values
-            graph_data['d_predicted'] = d_predicted
-            graph_data['d_target'] = d_target
+                # test for the delay profile
+                # d_predicted, d_target = self.test('delay')
+                d_predicted, d_target = self.test(dataset['X_d'], dataset['Y_d'])
+                # again, refer to cell 13 of the jupyter notebook for plotting or stream the values
+                graph_data['d_predicted'] = d_predicted
+                graph_data['d_target'] = d_target
 
-            # test for random profile
-            # r_predicted, r_target = self.test('random')
-            r_predicted, r_target = self.test(test_chunk['X_r'], test_chunk['Y_r'])
-            # again, refer to cell 16 of the jupyter notebook for plotting or stream the values
-            graph_data['r_predicted'] = r_predicted
-            graph_data['r_target'] = r_target
+                # test for random profile
+                # r_predicted, r_target = self.test('random')
+                r_predicted, r_target = self.test(dataset['X_r'], dataset['Y_r'])
+                # again, refer to cell 16 of the jupyter notebook for plotting or stream the values
+                graph_data['r_predicted'] = r_predicted
+                graph_data['r_target'] = r_target
 
-            # compute the normal profile errors
-            n_errors = self.utils.regression_error(n_predicted, n_target)
-            graph_data['n_errors'] = n_errors
-            # compute delay profile error
-            d_errors = self.utils.regression_error(d_predicted, d_target)
-            graph_data['d_errors'] = d_errors
-            # compute random profile error
-            r_errors = self.utils.regression_error(r_predicted, r_target)
-            graph_data['r_errors'] = r_errors
-            # refer to cell 18 for the plot of this outputs or stream using your module
+                # compute the normal profile errors
+                n_errors = self.utils.regression_error(n_predicted, n_target)
+                graph_data['n_errors'] = n_errors
+                # compute delay profile error
+                d_errors = self.utils.regression_error(d_predicted, d_target)
+                graph_data['d_errors'] = d_errors
+                # compute random profile error
+                r_errors = self.utils.regression_error(r_predicted, r_target)
+                graph_data['r_errors'] = r_errors
+                # refer to cell 18 for the plot of this outputs or stream using your module
 
-            # compute chebyshev probability
-            # from normal profile validation data
-            mu, variance = np.mean(n_errors), np.var(n_errors)
-            # compute the probability for the random and delay profile
-            r_prob = self.utils.chebyshev_probability(mu, variance, r_errors)
-            graph_data['r_prob'] = r_prob
-            d_prob = self.utils.chebyshev_probability(mu, variance, d_errors)
-            graph_data['d_prob'] = d_prob
-            # refer to cell 20 of the jupyter notebook
-            # for the plot or stream using your module
-            return graph_data
+                # compute chebyshev probability
+                # from normal profile validation data
+                mu, variance = np.mean(n_errors), np.var(n_errors)
+                # compute the probability for the random and delay profile
+                r_prob = self.utils.chebyshev_probability(mu, variance, r_errors)
+                graph_data['r_prob'] = r_prob
+                d_prob = self.utils.chebyshev_probability(mu, variance, d_errors)
+                graph_data['d_prob'] = d_prob
+                # refer to cell 20 of the jupyter notebook
+                # for the plot or stream using your module
+                graph_data_bytes = json.dumps(str(graph_data)).encode('utf-8')
+                yield graph_data_bytes
 
     # def test(self, experiment_name):
     #     # a handy function for testing any of the profile
