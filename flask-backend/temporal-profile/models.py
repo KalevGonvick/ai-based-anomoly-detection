@@ -85,7 +85,6 @@ class Teachable_AI(object):
         X_train, X_test, Y_train, Y_test = train_test_split(
             X, Y, train_size=self.train_size, random_state=50)
         X_train, X_test = tf.cast(X_train,tf.float32), tf.cast(X_test, tf.float32)
-
         """
         I read this data here so that I can divide it into chunks and process them
         seperately. This allows us to return chunks of results at a time to
@@ -94,7 +93,7 @@ class Teachable_AI(object):
         # the data from delay.csv and random.csv seperated into input and target
         X_d, Y_d = self.utils.load_data('delay')
         X_r, Y_r = self.utils.load_data('random')
-
+        print(Y_d)
         # number of chunks we split our data into
         num_chunk = 10
         # arrays that hold the chunks of data
@@ -109,7 +108,7 @@ class Teachable_AI(object):
         chunked_data = []
         for i in range(num_chunk):
             chunked_data.append({
-                'X_test': X_test_split[i],
+                'X_test': tf.cast(X_test_split[i],tf.float32),
                 'Y_test': Y_test_split[i],
                 'X_d': X_d_split[i],
                 'Y_d': Y_d_split[i],
@@ -143,14 +142,14 @@ class Teachable_AI(object):
 
             # test for the delay profile
             # d_predicted, d_target = self.test('delay')
-            d_predicted, d_target = self.test(test_chunk['X_d'], ['Y_d'])
+            d_predicted, d_target = self.test(test_chunk['X_d'], test_chunk['Y_d'])
             # again, refer to cell 13 of the jupyter notebook for plotting or stream the values
             graph_data['d_predicted'] = d_predicted
             graph_data['d_target'] = d_target
 
             # test for random profile
             # r_predicted, r_target = self.test('random')
-            r_predicted, r_target = self.test(test_chunk['X_r'], ['Y_r'])
+            r_predicted, r_target = self.test(test_chunk['X_r'], test_chunk['Y_r'])
             # again, refer to cell 16 of the jupyter notebook for plotting or stream the values
             graph_data['r_predicted'] = r_predicted
             graph_data['r_target'] = r_target
@@ -176,7 +175,6 @@ class Teachable_AI(object):
             graph_data['d_prob'] = d_prob
             # refer to cell 20 of the jupyter notebook
             # for the plot or stream using your module
-            # print(graph_data)
             return graph_data
 
     # def test(self, experiment_name):
