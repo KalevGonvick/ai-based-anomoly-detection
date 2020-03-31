@@ -135,7 +135,7 @@ class Teachable_AI(object):
             n_predictions = n_predictions.flatten()
             # round the output to integers
             n_predicted = [round(val) for val in n_predictions]
-            n_target = testing['Y_test'].flatten()  # flatten target to single array too
+            n_target = test_chunk['Y_test'].flatten()  # flatten target to single array too
             # refer to cell 10 of the jupyter notebook for plotting or you can stream
             # the values using your own visualization tool we talked about before
             graph_data['n_predicted'] = n_predicted
