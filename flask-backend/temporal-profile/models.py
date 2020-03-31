@@ -95,6 +95,28 @@ class Teachable_AI(object):
         X_d, Y_d = self.utils.load_data('delay')
         X_r, Y_r = self.utils.load_data('random')
 
+        # number of chunks we split our data into
+        num_chunk = 10
+        # arrays that hold the chunks of data
+        X_test_split = np.array_split(X_test, num_chunk)
+        Y_test_split = np.array_split(Y_test, num_chunk)
+        X_d_split = np.array_split(X_d, num_chunk)
+        Y_d_split = np.array_split(Y_d, num_chunk)
+        X_r_split = np.array_split(X_r, num_chunk)
+        Y_r_split = np.array_split(Y_r, num_chunk)
+
+        # array that holds dictionaries with each chunk needed for the neural net
+        chunked_data = []
+        for i in range(num_chunk):
+            chunked_data.append({
+                'X_test': X_test_split[i],
+                'Y_test': Y_test_split[i],
+                'X_d': X_d_split[i],
+                'Y_d': Y_d_split[i],
+                'X_r': X_r_split[i],
+                'Y_r': Y_r_split[i]
+            })
+
         if self.train:  # train the model if the user selected to train
             print("---------Training--------")
             history = self.fit_model(X_train, Y_train)
@@ -104,15 +126,16 @@ class Teachable_AI(object):
             # or you can stream the values in your own module which yuu have been creating.
             print("--------Training Done---------")
         else:  # we are testing and not training
+            test_chunk = chunked_data[0]
             graph_data = {}
             print("---------Testing----------")
             # test our model on the normal test data
-            n_predictions = self.model.predict(X_test)
+            n_predictions = self.model.predict(test_chunk['X_test'])
             # flatten the predictions
             n_predictions = n_predictions.flatten()
             # round the output to integers
             n_predicted = [round(val) for val in n_predictions]
-            n_target = Y_test.flatten()  # flatten target to single array too
+            n_target = testing['Y_test'].flatten()  # flatten target to single array too
             # refer to cell 10 of the jupyter notebook for plotting or you can stream
             # the values using your own visualization tool we talked about before
             graph_data['n_predicted'] = n_predicted
@@ -120,14 +143,14 @@ class Teachable_AI(object):
 
             # test for the delay profile
             # d_predicted, d_target = self.test('delay')
-            d_predicted, d_target = self.test(X_d, Y_d)
+            d_predicted, d_target = self.test(test_chunk['X_d'], ['Y_d'])
             # again, refer to cell 13 of the jupyter notebook for plotting or stream the values
             graph_data['d_predicted'] = d_predicted
             graph_data['d_target'] = d_target
 
             # test for random profile
             # r_predicted, r_target = self.test('random')
-            r_predicted, r_target = self.test(X_r, Y_r)
+            r_predicted, r_target = self.test(test_chunk['X_r'], ['Y_r'])
             # again, refer to cell 16 of the jupyter notebook for plotting or stream the values
             graph_data['r_predicted'] = r_predicted
             graph_data['r_target'] = r_target
