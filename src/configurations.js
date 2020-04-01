@@ -11,6 +11,7 @@ export const r_chart_options =
     height: 350,
     group: 'anomaly',
     type: 'line',
+    background: '#abb3ba',
     animations: {
       enabled: true,
       easing: 'linear',
@@ -40,12 +41,12 @@ export const r_chart_options =
   },
   stroke: {
     curve: 'straight',
-    width: 5,
+    width: 3,
   },
   grid: {
     padding: {
-      left: 0,
-      right: 0
+      left: 1,
+      right: 1
     }
   },
   markers: {
@@ -92,6 +93,7 @@ export const d_chart_options =
     id: "d_predict_realtime_data_display",
     height: 350,
     group: 'anomaly',
+    background: '#abb3ba',
     type: 'line',
     animations: {
       enabled: true,
@@ -121,12 +123,12 @@ export const d_chart_options =
   },
   stroke: {
     curve: 'straight',
-    width: 5,
+    width: 3,
   },
   grid: {
     padding: {
-      left: 0,
-      right: 0
+      left: 1,
+      right: 1
     }
   },
   markers: {
@@ -174,6 +176,7 @@ export const n_chart_options =
     height: 350,
     group: 'anomaly',
     type: 'line',
+    background: '#abb3ba',
     animations: {
       enabled: true,
       easing: 'linear',
@@ -202,12 +205,12 @@ export const n_chart_options =
   },
   stroke: {
     curve: 'straight',
-    width: 5,
+    width: 3,
   },
   grid: {
     padding: {
-      left: 0,
-      right: 0
+      left: 1,
+      right: 1
     }
   },
   markers: {

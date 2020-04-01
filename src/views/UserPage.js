@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import CSVDropzone from '../components/UserPageComponents/CSVDropzone';
-import {Row, Col, Button} from 'react-bootstrap';
+import {Row, Col, Button, Form} from 'react-bootstrap';
 import * as CONSTANTS from '../configurations';
 
 /* apex chart stuff */
@@ -9,8 +9,7 @@ import Chart from 'react-apexcharts'
 import '../apexcharts.css'
 
 /* live socket libs */
-//import io from 'socket.io-client';
-//const socket = io('http://localhost');
+import socketIOClient from "socket.io-client";
 
 /* test JSON stuff */
 //import * as respdata from './server_response.json';
@@ -21,6 +20,11 @@ class UserPage extends Component {
   constructor() {
     super();
     this.state = {
+      response: false,
+      endpoint: "http://127.0.0.1:3000",
+      new_r_predict: [],
+      new_d_predict: [],
+      new_n_predict: [],
 			r_options: CONSTANTS.r_chart_options,
       d_options: CONSTANTS.d_chart_options,
       n_options: CONSTANTS.n_chart_options,
@@ -46,18 +50,52 @@ class UserPage extends Component {
 
   updateData = () => {
     const time = Math.floor(new Date().getTime());
-    this.update_r_predict(time);
-    this.update_d_predict(time);
-    this.update_n_predict(time);
+    let r_dat = this.state.new_r_predict;
+    let d_dat = this.state.new_d_predict;
+    let n_dat = this.state.new_n_predict;
+    if(r_dat.length > 0){
+      this.update_r_predict(time, r_dat.shift());
+    } else {
+      this.update_r_predict(time, null);
+    }
+    if(d_dat.length > 0){
+      this.update_d_predict(time, d_dat.shift());
+    } else {
+      this.update_d_predict(time, null);
+    }
+    if(n_dat.length > 0){
+      this.update_n_predict(time, n_dat.shift());
+    } else {
+      this.update_n_predict(time, null);
+    }
 
+    this.setState({
+      new_r_predict: r_dat,
+      new_d_predict: d_dat,
+      new_n_predict: n_dat
+    })
     /* for some reason this does not work?!?!?!? */
     //this.update_r_error(time);
     //this.update_d_error(time);
   };
 
-  update_r_predict = (time) => {
+  addToQueue = (data) => {
+    let new_r_predict_dat = this.state.new_r_predict
+    new_r_predict_dat.push(data.r_predicted);
+    let new_d_predict_dat = this.state.new_d_predict
+    new_d_predict_dat.push(data.d_predicted);
+    let new_n_predict_dat = this.state.new_n_predict
+    new_n_predict_dat.push(data.n_predicted);
+    this.setState({
+      new_r_predict: new_r_predict_dat,
+      new_d_predict: new_d_predict_dat,
+      new_n_predict: new_n_predict_dat
+    })
+  }
+
+  update_r_predict = (time, dat) => {
     const x = time;
-    const y = Math.floor(Math.random() * 90);
+    const y = dat;
     let { data } = this.state.r_predict_series[0];
     data.push({x, y});
     this.setState({ r_predict_series: [{ data }] }, () =>
@@ -66,9 +104,9 @@ class UserPage extends Component {
     //if (data.length > 150) this.resetData();
   }
 
-  update_d_predict = (time) => {
+  update_d_predict = (time, dat) => {
     const x = time;
-    const y = Math.floor(Math.random() * 90);
+    const y = dat;
     let { data } = this.state.d_predict_series[0];
     data.push({x, y});
     this.setState({ d_predict_series: [{ data }] }, () =>
@@ -77,9 +115,9 @@ class UserPage extends Component {
     //if (data.length > 150) this.resetData();
   }
 
-  update_n_predict = (time) => {
+  update_n_predict = (time, dat) => {
     const x = time;
-    const y = Math.floor(Math.random() * 90);
+    const y = dat
     let { data } = this.state.n_predict_series[0];
     data.push({x, y});
     this.setState({ n_predict_series: [{ data }] }, () =>
@@ -123,6 +161,9 @@ class UserPage extends Component {
   }
 
   componentDidMount() {
+    const { endpoint } = this.state;
+    const socket = socketIOClient(endpoint);
+    socket.on("anomaly-get", data => this.addToQueue(data));
     this.updateInterval = setInterval(() => this.updateData(), CONSTANTS.animation_interval);
     }
 
@@ -141,7 +182,7 @@ class UserPage extends Component {
     return (
       <div>
       <Row>
-        <Col>
+        <Col md={{ span: 10, offset: 1 }}>
           <Chart
             options={r_options}
             series={r_predict_series}
@@ -150,7 +191,7 @@ class UserPage extends Component {
         </Col>
       </Row>
       <Row>
-        <Col>
+        <Col md={{ span: 10, offset: 1 }}>
           <Chart
             options={d_options}
             series={d_predict_series}
@@ -159,7 +200,7 @@ class UserPage extends Component {
         </Col>
       </Row>
       <Row>
-        <Col>
+        <Col md={{ span: 10, offset: 1 }}>
           <Chart
             options={n_options}
             series={n_predict_series}
@@ -168,9 +209,44 @@ class UserPage extends Component {
         </Col>
       </Row>
       <Row>
-      <Col>
+      <Col md={{ span: 10, offset: 1 }}>
         <CSVDropzone />
       </Col>
+      </Row>
+      <Row className="mb-2">
+        <Col md={{ span: 10, offset: 1 }}>
+        <Form>
+          <Form.Row>
+            <Form.Group as={Col} controlId="formGridEpoch">
+              <Form.Label>Epochs</Form.Label>
+              <Form.Control type="number" placeholder="Enter the number of epochs..." />
+            </Form.Group>
+
+            <Form.Group as={Col} controlId="formGridXWindow">
+              <Form.Label>X-Window</Form.Label>
+              <Form.Control type="number" placeholder="Enter how far ahead you want to predict..." />
+            </Form.Group>
+
+            <Form.Group as={Col} controlId="formGridFeatures">
+              <Form.Label>Features</Form.Label>
+              <Form.Control type="number" placeholder="Enter the amount of features..." />
+            </Form.Group>
+            <Form.Group as={Col} controlId="formGridBatch">
+              <Form.Label>Batch Size</Form.Label>
+              <Form.Control type="number" placeholder="Enter the batch size..."/>
+            </Form.Group>
+
+            <Form.Group as={Col} controlId="formGridTrainSize">
+              <Form.Label>Train Size</Form.Label>
+              <Form.Control type="number" placeholder="Enter the train size size..."/>
+            </Form.Group>
+          </Form.Row>
+
+          <Button onClick={() => {alert('Demo only, form is only visual')}} variant="primary" type="button">
+            Submit
+          </Button>
+          </Form>
+        </Col>
       </Row>
       </div>
     );
