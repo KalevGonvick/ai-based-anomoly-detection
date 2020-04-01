@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import CSVDropzone from '../components/UserPageComponents/CSVDropzone';
-import {Row, Col} from 'react-bootstrap';
+import {Row, Col, Button} from 'react-bootstrap';
 import * as CONSTANTS from '../configurations';
 
 /* apex chart stuff */
@@ -21,50 +21,101 @@ class UserPage extends Component {
   constructor() {
     super();
     this.state = {
-			options: CONSTANTS.second_op,
-      series: [{
-        name: 'Running',
-        data: []
-      }, {
-        name: 'Waiting',
-        data: []
-      }],
+			r_options: CONSTANTS.r_chart_options,
+      d_options: CONSTANTS.d_chart_options,
+      n_options: CONSTANTS.n_chart_options,
+      re_options: CONSTANTS.re_chart_options,
+      de_options: CONSTANTS.de_chart_options,
+      r_predict_series: [{
+        name: 'r_predict',
+        data: [] }],
+      d_predict_series: [{
+        name: 'd_predict',
+        data: [] }],
+      n_predict_series: [{
+        name: 'n_predict',
+        data: [] }],
+      re_predict_series: [{
+        name: 'r_predict_error',
+        data: [] }],
+      de_predict_series: [{
+        name: 'd_predict_error',
+        data: [] }]
 		};
   }
 
   updateData = () => {
-    const x = Math.floor(new Date().getTime() / CONSTANTS.animation_interval);
-    const y = Math.floor(Math.random() * 90);
-    const y2 = Math.floor(Math.random() * 90);
+    const time = Math.floor(new Date().getTime());
+    this.update_r_predict(time);
+    this.update_d_predict(time);
+    this.update_n_predict(time);
 
-    let { data } = this.state.series[0];
-    let { data2 } = this.state.series[1];
-
-    data.push({ x, y });
-    console.log(data2)
-    //data2.push({ x, y2 });
-
-    this.setState({ series: [
-      {
-      name: "d_predicted",
-      data: data
-      }, {
-      name: "r_predicted",
-      data: data
-      }]}, () =>
-      ApexCharts.exec("realtime_data_display", "updateSeries", this.state.series)
-    );
-
-    // stop data array from leaking memory and growing too big
-    if (data.length > 150) this.resetData();
+    /* for some reason this does not work?!?!?!? */
+    //this.update_r_error(time);
+    //this.update_d_error(time);
   };
 
+  update_r_predict = (time) => {
+    const x = time;
+    const y = Math.floor(Math.random() * 90);
+    let { data } = this.state.r_predict_series[0];
+    data.push({x, y});
+    this.setState({ r_predict_series: [{ data }] }, () =>
+      ApexCharts.exec("r_predict_realtime_data_display", "updateSeries", this.state.r_predict_series)
+    );
+    //if (data.length > 150) this.resetData();
+  }
+
+  update_d_predict = (time) => {
+    const x = time;
+    const y = Math.floor(Math.random() * 90);
+    let { data } = this.state.d_predict_series[0];
+    data.push({x, y});
+    this.setState({ d_predict_series: [{ data }] }, () =>
+      ApexCharts.exec("d_predict_realtime_data_display", "updateSeries", this.state.d_predict_series)
+    );
+    //if (data.length > 150) this.resetData();
+  }
+
+  update_n_predict = (time) => {
+    const x = time;
+    const y = Math.floor(Math.random() * 90);
+    let { data } = this.state.n_predict_series[0];
+    data.push({x, y});
+    this.setState({ n_predict_series: [{ data }] }, () =>
+      ApexCharts.exec("n_predict_realtime_data_display", "updateSeries", this.state.n_predict_series)
+    );
+    //if (data.length > 150) this.resetData();
+  }
+
+  update_r_error = (time) => {
+    const x = time;
+    const y = Math.floor(Math.random() * 90);
+    let { data } = this.state.re_predict_series[0];
+    data.push({x, y});
+    this.setState({ re_predict_series: [{ data }] }, () =>
+      ApexCharts.exec("re_realtime_data_display", "updateSeries", this.re_predict_series)
+    );
+    //if (data.length > 150) this.resetData();
+  }
+
+  update_d_error = (time) => {
+    const x = time;
+    const y = Math.floor(Math.random() * 90);
+    let { data } = this.state.de_predict_series[0];
+    data.push({x, y});
+    this.setState({ de_predict_series: [{ data }] }, () =>
+      ApexCharts.exec("de_realtime_data_display", "updateSeries", this.de_predict_series)
+    );
+    //if (data.length > 150) this.resetData();
+  }
+
   resetData = () => {
-    const { data } = this.state.series[0];
-    this.setState({
-      series: [
-        {data: data.slice(data.length - 50, data.length) }]
-    });
+    // const { data } = this.state.series[0];
+    // this.setState({
+    //   series: [
+    //     {data: data.slice(data.length - 50, data.length) }]
+    // });
   };
 
   componentWillUnmount() {
@@ -76,16 +127,44 @@ class UserPage extends Component {
     }
 
   render() {
-    const { options, series, events } = this.state;
+    const {
+      r_options,
+      r_predict_series,
+      d_options,
+      d_predict_series,
+      n_options,
+      n_predict_series,
+      re_options,
+      re_predict_series,
+      de_options,
+      de_predict_series } = this.state;
     return (
       <div>
-      <Row className="justify-content-md-center mt-2 mb-5">
-        <Col className="mixed-chart">
+      <Row>
+        <Col>
           <Chart
-            options={options}
-            series={series}
+            options={r_options}
+            series={r_predict_series}
             type="line"
-            height={350} />
+            height={200} />
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <Chart
+            options={d_options}
+            series={d_predict_series}
+            type="line"
+            height={200} />
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <Chart
+            options={n_options}
+            series={n_predict_series}
+            type="line"
+            height={150} />
         </Col>
       </Row>
       <Row>
@@ -99,3 +178,21 @@ class UserPage extends Component {
 }
 
 export default UserPage;
+
+// ** for some reason this does not work?!?!?!?
+// <Row className="justify-content-md-center">
+//   <Col className="mixed-chart">
+//     <Chart
+//       options={re_options}
+//       series={re_predict_series}
+//       type="line"
+//       height={200} />
+//   </Col>
+//   <Col className="line-chart">
+//     <Chart
+//       options={de_options}
+//       series={de_predict_series}
+//       type="line"
+//       height={200} />
+//   </Col>
+// </Row>

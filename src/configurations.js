@@ -1,99 +1,16 @@
-const ANIMATIONINTERVAL = 750;
-const XAXISRANGE = 100;
+const ANIMATIONINTERVAL = 1250;
+const XAXISRANGE = 270000;
 export const seed = 56;
 //export const tick_interval = 86400000;
 export const x_axis_range = XAXISRANGE;
 export const animation_interval = ANIMATIONINTERVAL;
-export const chart_options = {
-  chart: {
-    height: 350,
-    type: 'line',
-    stacked: true,
-    animations: {
-      enabled: true,
-      easing: 'linear',
-      dynamicAnimation: {
-        speed: 1000
-      }
-    },
-    dropShadow: {
-      enabled: true,
-      opacity: 0.3,
-      blur: 5,
-      left: -7,
-      top: 22
-    },
-    toolbar: {
-      show: false
-    },
-    zoom: {
-      enabled: false
-    }
-  },
-  dataLabels: {
-    enabled: false
-  },
-  stroke: {
-    curve: 'straight',
-    colors: '#2ecc71'
-  },
-  title: { text: 'Anomaly Results', align: 'left' },
-  markers: {
-    size: 0,
-    hover: {
-      size: 0
-    }
-  },
-
-  xaxis: {
-    type: 'datetime',
-    range: 2700000
-  },
-  subtitle: {
-    text: '20',
-    floating: true,
-    align: 'right',
-    offsetY: 0,
-    style: {
-      fontSize: '22px'
-    }
-  },
-  yaxis: {
-   decimalsInFloat: 2,
-   opposite: true,
-   labels: {
-     offsetX: -10
-   }
- },
- subtitle: {
-    text: '20',
-    floating: true,
-    align: 'right',
-    offsetY: 0,
-    style: {
-      fontSize: '22px'
-    }
-  },
- legend: {
-   show: true,
-   floating: true,
-   horizontalAlign: 'left',
-   onItemClick: {
-     toggleDataSeries: false
-   },
-   position: 'top',
-   offsetY: -33,
-   offsetX: 60
- }
-};
-
-export const second_op =
+export const r_chart_options =
   {
   chart: {
-    id: "realtime_data_display",
+    id: "r_predict_realtime_data_display",
     height: 350,
+    group: 'anomaly',
     type: 'line',
-    stacked: true,
     animations: {
       enabled: true,
       easing: 'linear',
@@ -101,6 +18,7 @@ export const second_op =
         speed: ANIMATIONINTERVAL
       }
     },
+    colors: ['#545454'],
     dropShadow: {
       enabled: true,
       opacity: 0.3,
@@ -109,7 +27,9 @@ export const second_op =
       top: 22
     },
     toolbar: {
-      show: false
+      show: false,
+      shared: false,
+      intersect: true
     },
     zoom: {
       enabled: false
@@ -138,20 +58,335 @@ export const second_op =
     type: 'datetime',
     range: XAXISRANGE,
   },
+  yaxis: {
+    labels: {
+      show: true,
+      align: 'right',
+      minWidth: 100,
+      maxWidth: 100
+  },
+},
   title: {
-    text: 'Processes',
+    text: 'r_predict',
     align: 'left',
     style: {
       fontSize: '12px'
     }
   },
-  subtitle: {
-    text: '20',
+  legend: {
+    show: true,
     floating: true,
-    align: 'right',
-    offsetY: 0,
+    horizontalAlign: 'left',
+    onItemClick: {
+      toggleDataSeries: false
+    },
+    position: 'top',
+    offsetY: -33,
+    offsetX: 60
+  },
+}
+
+export const d_chart_options =
+  {
+  chart: {
+    id: "d_predict_realtime_data_display",
+    height: 350,
+    group: 'anomaly',
+    type: 'line',
+    animations: {
+      enabled: true,
+      easing: 'linear',
+      dynamicAnimation: {
+        speed: ANIMATIONINTERVAL
+      }
+    },
+    dropShadow: {
+      enabled: true,
+      opacity: 0.3,
+      blur: 5,
+      left: -7,
+      top: 22
+    },
+    toolbar: {
+      show: false,
+      shared: false,
+      intersect: true
+    },
+    zoom: {
+      enabled: false
+    }
+  },
+  dataLabels: {
+    enabled: false
+  },
+  stroke: {
+    curve: 'straight',
+    width: 5,
+  },
+  grid: {
+    padding: {
+      left: 0,
+      right: 0
+    }
+  },
+  markers: {
+    size: 0,
+    hover: {
+      size: 0
+    }
+  },
+  xaxis: {
+    type: 'datetime',
+    range: XAXISRANGE,
+  },
+  yaxis: {
+    labels: {
+      show: true,
+      align: 'right',
+      minWidth: 100,
+      maxWidth: 100
+  },
+},
+  title: {
+    text: 'd_predictions',
+    align: 'left',
     style: {
-      fontSize: '22px'
+      fontSize: '12px'
+    }
+  },
+  legend: {
+    show: true,
+    floating: true,
+    horizontalAlign: 'left',
+    onItemClick: {
+      toggleDataSeries: false
+    },
+    position: 'top',
+    offsetY: -33,
+    offsetX: 60
+  },
+}
+
+export const n_chart_options =
+  {
+  chart: {
+    id: "n_predict_realtime_data_display",
+    height: 350,
+    group: 'anomaly',
+    type: 'line',
+    animations: {
+      enabled: true,
+      easing: 'linear',
+      dynamicAnimation: {
+        speed: ANIMATIONINTERVAL
+      }
+    },
+    dropShadow: {
+      enabled: true,
+      opacity: 0.3,
+      blur: 5,
+      left: -7,
+      top: 22
+    },
+    toolbar: {
+      show: false,
+      shared: false,
+      intersect: true
+    },
+    zoom: {
+      enabled: false
+    }
+  },
+  dataLabels: {
+    enabled: false
+  },
+  stroke: {
+    curve: 'straight',
+    width: 5,
+  },
+  grid: {
+    padding: {
+      left: 0,
+      right: 0
+    }
+  },
+  markers: {
+    size: 0,
+    hover: {
+      size: 0
+    }
+  },
+  xaxis: {
+    type: 'datetime',
+    range: XAXISRANGE,
+  },
+  yaxis: {
+    labels: {
+      show: true,
+      align: 'right',
+      minWidth: 100,
+      maxWidth: 100
+  },
+},
+  title: {
+    text: 'n_predictions',
+    align: 'left',
+    style: {
+      fontSize: '12px'
+    }
+  },
+  legend: {
+    show: true,
+    floating: true,
+    horizontalAlign: 'left',
+    onItemClick: {
+      toggleDataSeries: false
+    },
+    position: 'top',
+    offsetY: -33,
+    offsetX: 60
+  },
+}
+
+export const re_chart_options =
+  {
+  chart: {
+    id: "re_realtime_data_display",
+    height: 350,
+    group: 'anomaly',
+    type: 'line',
+    animations: {
+      enabled: true,
+      easing: 'linear',
+      dynamicAnimation: {
+        speed: ANIMATIONINTERVAL
+      }
+    },
+    dropShadow: {
+      enabled: true,
+      opacity: 0.3,
+      blur: 5,
+      left: -7,
+      top: 22
+    },
+    toolbar: {
+      show: false,
+      shared: false,
+      intersect: true
+    },
+    zoom: {
+      enabled: false
+    }
+  },
+  dataLabels: {
+    enabled: false
+  },
+  stroke: {
+    curve: 'straight',
+    width: 5,
+  },
+  grid: {
+    padding: {
+      left: 0,
+      right: 0
+    }
+  },
+  markers: {
+    size: 0,
+    hover: {
+      size: 0
+    }
+  },
+  xaxis: {
+    type: 'datetime',
+    range: XAXISRANGE,
+  },
+  yaxis: {
+    labels: {
+      show: true,
+      align: 'right',
+      minWidth: 100,
+      maxWidth: 100
+  },
+},
+  title: {
+    text: 'r_predict_errors',
+    align: 'left',
+    style: {
+      fontSize: '12px'
+    }
+  },
+  legend: {
+    show: false,
+  },
+}
+
+export const de_chart_options =
+  {
+  chart: {
+    id: "de_realtime_data_display",
+    height: 350,
+    group: 'anomaly',
+    type: 'line',
+    animations: {
+      enabled: true,
+      easing: 'linear',
+      dynamicAnimation: {
+        speed: ANIMATIONINTERVAL
+      }
+    },
+    dropShadow: {
+      enabled: true,
+      opacity: 0.3,
+      blur: 5,
+      left: -7,
+      top: 22
+    },
+    toolbar: {
+      show: false,
+      shared: false,
+      intersect: true
+    },
+    zoom: {
+      enabled: false
+    }
+  },
+  dataLabels: {
+    enabled: false
+  },
+  stroke: {
+    curve: 'straight',
+    width: 5,
+  },
+  grid: {
+    padding: {
+      left: 0,
+      right: 0
+    }
+  },
+  markers: {
+    size: 0,
+    hover: {
+      size: 0
+    }
+  },
+  xaxis: {
+    type: 'datetime',
+    range: XAXISRANGE,
+  },
+  yaxis: {
+    labels: {
+      show: true,
+      align: 'right',
+      minWidth: 100,
+      maxWidth: 100
+  },
+},
+  title: {
+    text: 'd_predict_errors',
+    align: 'left',
+    style: {
+      fontSize: '12px'
     }
   },
   legend: {
