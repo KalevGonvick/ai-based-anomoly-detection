@@ -8,15 +8,6 @@ import ApexCharts from 'apexcharts'
 import Chart from 'react-apexcharts'
 import '../apexcharts.css'
 
-/* live socket libs */
-// import socketIOClient from "socket.io-client";
-
-/* test JSON stuff */
-import * as respdata from './test.json';
-// const test_r_predictions = respdata.r_predicted;
-// const test_d_predictions = respdata.d_predicted;
-// const test_r_predictions = respdata.n_predicted;
-
 const global_list_dat = [];
 
 class UserPage extends Component {
@@ -52,23 +43,30 @@ class UserPage extends Component {
   }
 
   IsJsonString = (str) => {
-    return true;
+    if(response) {
+    try {
+        a = JSON.parse(response);
+        return true;
+    } catch(e) {
+        alert(e);
+        return false;
+    }
+  }
 }
   updateData = () => {
     if(global_list_dat.length !== 0 &&  this.state.new_r_predict.length < 1) {
       for(let i = 0; i < global_list_dat.length; i++){
-        let temp_json = respdata;
-
+        let temp_json = global_list_dat[i];
         if(this.IsJsonString(temp_json)) {
-          console.log('im here');
+          temp_json = JSON.parse(temp_json);
           if(temp_json){
             let r_dat = this.state.new_r_predict;
-            r_dat.concat(temp_json.default.r_predicted);
+            r_dat.concat(temp_json.r_predicted);
             let d_dat = this.state.new_d_predict;
-            d_dat.concat(temp_json.default.d_predicted);
+            d_dat.concat(temp_json.d_predicted);
             let n_dat = this.state.new_n_predict;
-            n_dat.concat(temp_json.default.n_predicted);
-            console.log(temp_json.default.n_predicted);
+            n_dat.concat(temp_json.n_predicted);
+            console.log(temp_json.n_predicted);
             this.setState({
               new_r_predict: temp_json.default.r_predicted,
               new_d_predict: temp_json.default.d_predicted,
@@ -84,21 +82,6 @@ class UserPage extends Component {
     this.update_n_predict(time);
   };
 
-  // addToQueue = (data) => {
-  //   let new_r_predict_dat = this.state.new_r_predict
-  //   new_r_predict_dat.push(data.r_predicted);
-  //   let new_d_predict_dat = this.state.new_d_predict
-  //   new_d_predict_dat.push(data.d_predicted);
-  //   let new_n_predict_dat = this.state.new_n_predict
-  //   new_n_predict_dat.push(data.n_predicted);
-  //   this.setState({
-  //     new_r_predict: new_r_predict_dat,
-  //     new_d_predict: new_d_predict_dat,
-  //     new_n_predict: new_n_predict_dat
-  //   })
-  // }
-
-
   update_r_predict = (time) => {
     const x = time;
     let new_y_dat = this.state.new_r_predict;
@@ -111,7 +94,12 @@ class UserPage extends Component {
     this.setState({ r_predict_series: [{ data }] }, () =>
       ApexCharts.exec("r_predict_realtime_data_display", "updateSeries", this.state.r_predict_series)
     );
-    //if (data.length > 150) this.resetData();
+    if (data.length > 150) {
+      this.setState({
+        r_predict_series: [
+          {data: data.slice(data.length - 50, data.length) }]
+      });
+    }
   }
 
   update_d_predict = (time) => {
@@ -126,7 +114,12 @@ class UserPage extends Component {
     this.setState({ d_predict_series: [{ data }] }, () =>
       ApexCharts.exec("d_predict_realtime_data_display", "updateSeries", this.state.d_predict_series)
     );
-    //if (data.length > 150) this.resetData();
+    if (data.length > 150) {
+      this.setState({
+        d_predict_series: [
+          {data: data.slice(data.length - 50, data.length) }]
+      });
+    }
   }
 
   update_n_predict = (time) => {
@@ -141,41 +134,16 @@ class UserPage extends Component {
     this.setState({ n_predict_series: [{ data }] }, () =>
       ApexCharts.exec("n_predict_realtime_data_display", "updateSeries", this.state.n_predict_series)
     );
-    //if (data.length > 150) this.resetData();
+    if (data.length > 150) {
+      this.setState({
+        n_predict_series: [
+          {data: data.slice(data.length - 50, data.length) }]
+      });
+    }
   }
 
-  update_r_error = (time) => {
-    const x = time;
-    const y = Math.floor(Math.random() * 90);
-    let { data } = this.state.re_predict_series[0];
-    data.push({x, y});
-    this.setState({ re_predict_series: [{ data }] }, () =>
-      ApexCharts.exec("re_realtime_data_display", "updateSeries", this.re_predict_series)
-    );
-    //if (data.length > 150) this.resetData();
-  }
-
-  update_d_error = (time) => {
-    const x = time;
-    const y = Math.floor(Math.random() * 90);
-    let { data } = this.state.de_predict_series[0];
-    data.push({x, y});
-    this.setState({ de_predict_series: [{ data }] }, () =>
-      ApexCharts.exec("de_realtime_data_display", "updateSeries", this.de_predict_series)
-    );
-    //if (data.length > 150) this.resetData();
-  }
-
-  resetData = () => {
-    // const { data } = this.state.series[0];
-    // this.setState({
-    //   series: [
-    //     {data: data.slice(data.length - 50, data.length) }]
-    // });
-  };
-
+  /* THE FUNCTION BELOW IS JUST FOR THE DEMO AND SHOULD NOT BE USED IN A REAL PRODUCT */
   getDemoGraphData = () => {
-    // fetch(this.state.endpoint).then(response => response.body).then(body => body.pipeTo(new DestinationHandler(body)));
     fetch(this.state.endpoint, {
       'Access-Control-Allow-Origin': '*'
     }).then((response) => {
@@ -200,9 +168,6 @@ class UserPage extends Component {
     });
     return new Response(stream, { headers: { "Content-Type": "text/html" } });
   });
-  setTimeout(function() {
-    global_list_dat.push(0);
-  }, 10000);
 }
 
   componentWillUnmount() {
@@ -301,21 +266,3 @@ class UserPage extends Component {
 }
 
 export default UserPage;
-
-// ** for some reason this does not work?!?!?!?
-// <Row className="justify-content-md-center">
-//   <Col className="mixed-chart">
-//     <Chart
-//       options={re_options}
-//       series={re_predict_series}
-//       type="line"
-//       height={200} />
-//   </Col>
-//   <Col className="line-chart">
-//     <Chart
-//       options={de_options}
-//       series={de_predict_series}
-//       type="line"
-//       height={200} />
-//   </Col>
-// </Row>
