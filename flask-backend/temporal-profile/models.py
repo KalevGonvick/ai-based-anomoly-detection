@@ -94,7 +94,7 @@ class Teachable_AI(object):
         X_d, Y_d = self.utils.load_data('delay')
         X_r, Y_r = self.utils.load_data('random')
         # number of chunks we split our data into
-        num_chunk = 10
+        num_chunk = 100
         # arrays that hold the chunks of data
         X_test_split = np.array_split(X_test, num_chunk)
         Y_test_split = np.array_split(Y_test, num_chunk)
