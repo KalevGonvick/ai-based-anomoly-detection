@@ -12,9 +12,10 @@ import '../apexcharts.css'
 // import socketIOClient from "socket.io-client";
 
 /* test JSON stuff */
-//import * as respdata from './server_response.json';
-//const test_r_predictions = data.r_predicted;
-//const test_d_predictions = data.d_predicted;
+import * as respdata from './test.json';
+// const test_r_predictions = respdata.r_predicted;
+// const test_d_predictions = respdata.d_predicted;
+// const test_r_predictions = respdata.n_predicted;
 
 const global_list_dat = [];
 
@@ -23,7 +24,7 @@ class UserPage extends Component {
     super();
     this.state = {
       response: false,
-      endpoint: "http://127.0.0.1:80/graphData",
+      endpoint: "http://34.69.153.94/graphData",
       new_r_predict: [],
       new_d_predict: [],
       new_n_predict: [],
@@ -56,33 +57,22 @@ class UserPage extends Component {
   updateData = () => {
     if(global_list_dat.length !== 0 &&  this.state.new_r_predict.length < 1) {
       for(let i = 0; i < global_list_dat.length; i++){
-        let temp_json = global_list_dat[0].toString();
-
-        /* re-format from js to python */
-        temp_json = temp_json.replace(/'/g, '"')
-        temp_json = temp_json.replace(/(^")|("$)/g, "");
-        temp_json = temp_json.replace(/array/g, '');
-        temp_json = temp_json.replace(/[()]+/g, '');
-        temp_json = temp_json.replace(/[.][.][.][,]/g, '');
-        temp_json = temp_json.replace(/(,$)/g, "]}");
-        temp_json = temp_json.replace(/(0$)/g, "]}");
-
+        let temp_json = respdata;
 
         if(this.IsJsonString(temp_json)) {
-          temp_json = JSON.parse(temp_json);
           console.log('im here');
           if(temp_json){
             let r_dat = this.state.new_r_predict;
-            r_dat.concat(temp_json.r_predicted);
+            r_dat.concat(temp_json.default.r_predicted);
             let d_dat = this.state.new_d_predict;
-            d_dat.concat(temp_json.d_predicted);
+            d_dat.concat(temp_json.default.d_predicted);
             let n_dat = this.state.new_n_predict;
-            n_dat.concat(temp_json.n_predicted);
-            console.log(temp_json.n_predicted);
+            n_dat.concat(temp_json.default.n_predicted);
+            console.log(temp_json.default.n_predicted);
             this.setState({
-              new_r_predict: temp_json.r_predicted,
-              new_d_predict: temp_json.d_predicted,
-              new_n_predict: temp_json.n_predicted
+              new_r_predict: temp_json.default.r_predicted,
+              new_d_predict: temp_json.default.d_predicted,
+              new_n_predict: temp_json.default.n_predicted
             })
           }
         }
