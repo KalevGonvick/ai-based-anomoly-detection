@@ -137,21 +137,21 @@ class Teachable_AI(object):
                 # refer to cell 10 of the jupyter notebook for plotting or you can stream
                 # the values using your own visualization tool we talked about before
                 graph_data['n_predicted'] = n_predicted
-                graph_data['n_target'] = n_target
+                graph_data['n_target'] = n_target.tolist()
 
                 # test for the delay profile
                 # d_predicted, d_target = self.test('delay')
                 d_predicted, d_target = self.test(dataset['X_d'], dataset['Y_d'])
                 # again, refer to cell 13 of the jupyter notebook for plotting or stream the values
                 graph_data['d_predicted'] = d_predicted
-                graph_data['d_target'] = d_target
+                graph_data['d_target'] = d_target.tolist()
 
                 # test for random profile
                 # r_predicted, r_target = self.test('random')
                 r_predicted, r_target = self.test(dataset['X_r'], dataset['Y_r'])
                 # again, refer to cell 16 of the jupyter notebook for plotting or stream the values
                 graph_data['r_predicted'] = r_predicted
-                graph_data['r_target'] = r_target
+                graph_data['r_target'] = r_target.tolist()
 
                 # compute the normal profile errors
                 n_errors = self.utils.regression_error(n_predicted, n_target)
@@ -183,7 +183,7 @@ class Teachable_AI(object):
     #     X = tf.cast(X, tf.float32)
     #     predicted = self.model.predict(X, verbose=0).flatten()
     #     # round to integers
-    #     predicted = [round(val) for val in predicted]
+    #     predicted = [round(val) for val in pr)edicted]
     #     target = Y.flatten()
     #     return predicted, target
 
