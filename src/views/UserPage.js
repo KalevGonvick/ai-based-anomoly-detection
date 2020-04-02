@@ -43,9 +43,9 @@ class UserPage extends Component {
   }
 
   IsJsonString = (str) => {
-    if(response) {
+    if(str) {
     try {
-        a = JSON.parse(response);
+        a = JSON.parse(str);
         return true;
     } catch(e) {
         alert(e);
@@ -68,9 +68,9 @@ class UserPage extends Component {
             n_dat.concat(temp_json.n_predicted);
             console.log(temp_json.n_predicted);
             this.setState({
-              new_r_predict: temp_json.default.r_predicted,
-              new_d_predict: temp_json.default.d_predicted,
-              new_n_predict: temp_json.default.n_predicted
+              new_r_predict: temp_json.r_predicted,
+              new_d_predict: temp_json.d_predicted,
+              new_n_predict: temp_json.n_predicted
             })
           }
         }
