@@ -4,3 +4,4 @@ pandas
 autoflake
 sklearn
 flask
+flask-socketio
