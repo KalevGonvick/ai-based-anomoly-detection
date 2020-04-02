@@ -176,7 +176,9 @@ class UserPage extends Component {
 
   getDemoGraphData = () => {
     // fetch(this.state.endpoint).then(response => response.body).then(body => body.pipeTo(new DestinationHandler(body)));
-    fetch(this.state.endpoint).then((response) => {
+    fetch(this.state.endpoint, {
+      'Access-Control-Allow-Origin': '*'
+    }).then((response) => {
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
       const stream = new ReadableStream({
@@ -198,6 +200,9 @@ class UserPage extends Component {
     });
     return new Response(stream, { headers: { "Content-Type": "text/html" } });
   });
+  setTimeout(function() {
+    global_list_dat.push(0);
+  }, 10000);
 }
 
   componentWillUnmount() {
