@@ -60,6 +60,8 @@ export const r_chart_options =
     range: XAXISRANGE,
   },
   yaxis: {
+    min: 0,
+    max: 5,
     labels: {
       show: true,
       align: 'right',
@@ -142,6 +144,8 @@ export const d_chart_options =
     range: XAXISRANGE,
   },
   yaxis: {
+    min: 0,
+    max: 5,
     labels: {
       show: true,
       align: 'right',
@@ -224,6 +228,8 @@ export const n_chart_options =
     range: XAXISRANGE,
   },
   yaxis: {
+    min: 0,
+    max: 5,
     labels: {
       show: true,
       align: 'right',
@@ -305,6 +311,8 @@ export const re_chart_options =
     range: XAXISRANGE,
   },
   yaxis: {
+    min: 0,
+    max: 5,
     labels: {
       show: true,
       align: 'right',
@@ -378,6 +386,8 @@ export const de_chart_options =
     range: XAXISRANGE,
   },
   yaxis: {
+    min: 0,
+    max: 5,
     labels: {
       show: true,
       align: 'right',

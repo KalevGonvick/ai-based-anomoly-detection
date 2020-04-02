@@ -9,19 +9,21 @@ import Chart from 'react-apexcharts'
 import '../apexcharts.css'
 
 /* live socket libs */
-import socketIOClient from "socket.io-client";
+// import socketIOClient from "socket.io-client";
 
 /* test JSON stuff */
 //import * as respdata from './server_response.json';
 //const test_r_predictions = data.r_predicted;
 //const test_d_predictions = data.d_predicted;
 
+const global_list_dat = [];
+
 class UserPage extends Component {
   constructor() {
     super();
     this.state = {
       response: false,
-      endpoint: "http://127.0.0.1:3000",
+      endpoint: "http://127.0.0.1:80/graphData",
       new_r_predict: [],
       new_d_predict: [],
       new_n_predict: [],
@@ -48,54 +50,72 @@ class UserPage extends Component {
 		};
   }
 
+  IsJsonString = (str) => {
+    return true;
+}
   updateData = () => {
-    const time = Math.floor(new Date().getTime());
-    let r_dat = this.state.new_r_predict;
-    let d_dat = this.state.new_d_predict;
-    let n_dat = this.state.new_n_predict;
-    if(r_dat.length > 0){
-      this.update_r_predict(time, r_dat.shift());
-    } else {
-      this.update_r_predict(time, null);
-    }
-    if(d_dat.length > 0){
-      this.update_d_predict(time, d_dat.shift());
-    } else {
-      this.update_d_predict(time, null);
-    }
-    if(n_dat.length > 0){
-      this.update_n_predict(time, n_dat.shift());
-    } else {
-      this.update_n_predict(time, null);
-    }
+    if(global_list_dat.length !== 0 &&  this.state.new_r_predict.length < 1) {
+      for(let i = 0; i < global_list_dat.length; i++){
+        let temp_json = global_list_dat[0].toString();
 
-    this.setState({
-      new_r_predict: r_dat,
-      new_d_predict: d_dat,
-      new_n_predict: n_dat
-    })
-    /* for some reason this does not work?!?!?!? */
-    //this.update_r_error(time);
-    //this.update_d_error(time);
+        /* re-format from js to python */
+        temp_json = temp_json.replace(/'/g, '"')
+        temp_json = temp_json.replace(/(^")|("$)/g, "");
+        temp_json = temp_json.replace(/array/g, '');
+        temp_json = temp_json.replace(/[()]+/g, '');
+        temp_json = temp_json.replace(/[.][.][.][,]/g, '');
+        temp_json = temp_json.replace(/(,$)/g, "]}");
+        temp_json = temp_json.replace(/(0$)/g, "]}");
+
+
+        if(this.IsJsonString(temp_json)) {
+          temp_json = JSON.parse(temp_json);
+          console.log('im here');
+          if(temp_json){
+            let r_dat = this.state.new_r_predict;
+            r_dat.concat(temp_json.r_predicted);
+            let d_dat = this.state.new_d_predict;
+            d_dat.concat(temp_json.d_predicted);
+            let n_dat = this.state.new_n_predict;
+            n_dat.concat(temp_json.n_predicted);
+            console.log(temp_json.n_predicted);
+            this.setState({
+              new_r_predict: temp_json.r_predicted,
+              new_d_predict: temp_json.d_predicted,
+              new_n_predict: temp_json.n_predicted
+            })
+          }
+        }
+      }
+    }
+    const time = Math.floor(new Date().getTime());
+    this.update_r_predict(time);
+    this.update_d_predict(time);
+    this.update_n_predict(time);
   };
 
-  addToQueue = (data) => {
-    let new_r_predict_dat = this.state.new_r_predict
-    new_r_predict_dat.push(data.r_predicted);
-    let new_d_predict_dat = this.state.new_d_predict
-    new_d_predict_dat.push(data.d_predicted);
-    let new_n_predict_dat = this.state.new_n_predict
-    new_n_predict_dat.push(data.n_predicted);
-    this.setState({
-      new_r_predict: new_r_predict_dat,
-      new_d_predict: new_d_predict_dat,
-      new_n_predict: new_n_predict_dat
-    })
-  }
+  // addToQueue = (data) => {
+  //   let new_r_predict_dat = this.state.new_r_predict
+  //   new_r_predict_dat.push(data.r_predicted);
+  //   let new_d_predict_dat = this.state.new_d_predict
+  //   new_d_predict_dat.push(data.d_predicted);
+  //   let new_n_predict_dat = this.state.new_n_predict
+  //   new_n_predict_dat.push(data.n_predicted);
+  //   this.setState({
+  //     new_r_predict: new_r_predict_dat,
+  //     new_d_predict: new_d_predict_dat,
+  //     new_n_predict: new_n_predict_dat
+  //   })
+  // }
 
-  update_r_predict = (time, dat) => {
+
+  update_r_predict = (time) => {
     const x = time;
-    const y = dat;
+    let new_y_dat = this.state.new_r_predict;
+    const y = new_y_dat.pop();
+    this.setState({
+      new_r_predict: new_y_dat
+    });
     let { data } = this.state.r_predict_series[0];
     data.push({x, y});
     this.setState({ r_predict_series: [{ data }] }, () =>
@@ -104,9 +124,13 @@ class UserPage extends Component {
     //if (data.length > 150) this.resetData();
   }
 
-  update_d_predict = (time, dat) => {
+  update_d_predict = (time) => {
     const x = time;
-    const y = dat;
+    let new_y_dat = this.state.new_d_predict;
+    const y = new_y_dat.pop();
+    this.setState({
+      new_d_predict: new_y_dat
+    });
     let { data } = this.state.d_predict_series[0];
     data.push({x, y});
     this.setState({ d_predict_series: [{ data }] }, () =>
@@ -115,9 +139,13 @@ class UserPage extends Component {
     //if (data.length > 150) this.resetData();
   }
 
-  update_n_predict = (time, dat) => {
+  update_n_predict = (time) => {
     const x = time;
-    const y = dat
+    let new_y_dat = this.state.new_n_predict;
+    const y = new_y_dat.pop();
+    this.setState({
+      new_n_predict: new_y_dat
+    });
     let { data } = this.state.n_predict_series[0];
     data.push({x, y});
     this.setState({ n_predict_series: [{ data }] }, () =>
@@ -156,14 +184,37 @@ class UserPage extends Component {
     // });
   };
 
+  getDemoGraphData = () => {
+    // fetch(this.state.endpoint).then(response => response.body).then(body => body.pipeTo(new DestinationHandler(body)));
+    fetch(this.state.endpoint).then((response) => {
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      const stream = new ReadableStream({
+        start(controller) {
+        function push() {
+          reader.read().then(({ done, value }) => {
+            if (done) {
+              controller.close();
+              return;
+            }
+            const json = decoder.decode(value);
+            global_list_dat.push(json);
+            push();
+
+          });
+        };
+        push();
+      }
+    });
+    return new Response(stream, { headers: { "Content-Type": "text/html" } });
+  });
+}
+
   componentWillUnmount() {
       clearInterval(this.updateInterval);
   }
 
   componentDidMount() {
-    const { endpoint } = this.state;
-    const socket = socketIOClient(endpoint);
-    socket.on("anomaly-get", data => this.addToQueue(data));
     this.updateInterval = setInterval(() => this.updateData(), CONSTANTS.animation_interval);
     }
 
@@ -181,7 +232,7 @@ class UserPage extends Component {
       de_predict_series } = this.state;
     return (
       <div>
-      <Row>
+      <Row className="mt-3">
         <Col md={{ span: 10, offset: 1 }}>
           <Chart
             options={r_options}
@@ -205,7 +256,7 @@ class UserPage extends Component {
             options={n_options}
             series={n_predict_series}
             type="line"
-            height={150} />
+            height={200} />
         </Col>
       </Row>
       <Row>
@@ -242,10 +293,11 @@ class UserPage extends Component {
             </Form.Group>
           </Form.Row>
 
-          <Button onClick={() => {alert('Demo only, form is only visual')}} variant="primary" type="button">
+          <Button onClick={this.getDemoGraphData} variant="primary" type="button">
             Submit
           </Button>
           </Form>
+          <div id='debug-spot'></div>
         </Col>
       </Row>
       </div>
