@@ -43,6 +43,7 @@ class UserPage extends Component {
   }
 
   IsJsonString = (str) => {
+    let a;
     if(str) {
     try {
         a = JSON.parse(str);
@@ -53,6 +54,7 @@ class UserPage extends Component {
     }
   }
 }
+
   updateData = () => {
     if(global_list_dat.length !== 0 &&  this.state.new_r_predict.length < 1) {
       for(let i = 0; i < global_list_dat.length; i++){
